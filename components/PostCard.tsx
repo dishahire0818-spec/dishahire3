@@ -15,7 +15,7 @@ export function PostCover({ post, sizes, priority, className }: { post: PostDTO;
         <Image src={post.coverUrl} alt="" fill sizes={sizes} priority={priority} unoptimized className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
       ) : (
         <div className="absolute inset-0 flex items-end p-6">
-          <span className="font-display text-5xl leading-none text-gold-300/90 italic">{post.category}</span>
+          <span className="font-display text-5xl leading-none text-gold-300/90">{post.category}</span>
         </div>
       )}
     </div>

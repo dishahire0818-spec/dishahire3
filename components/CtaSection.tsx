@@ -13,7 +13,7 @@ export async function CtaSection({ title, body }: { title?: React.ReactNode; bod
           <h2 className="text-4xl leading-[1.05] sm:text-6xl">
             {title ?? (
               <>
-                Ready to choose the <span className="italic text-gold-300">right direction?</span>
+                Ready to choose the <span className="text-shine-light">right direction?</span>
               </>
             )}
           </h2>

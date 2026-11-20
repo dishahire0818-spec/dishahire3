@@ -5,13 +5,13 @@ export function cn(...c: (string | false | null | undefined)[]) {
 }
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors disabled:opacity-60 disabled:pointer-events-none";
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[-0.01em] transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none";
 export const btn = {
-  gold: cn(base, "bg-gold-500 text-brand-950 hover:bg-gold-300 px-5 py-2.5 text-sm"),
-  dark: cn(base, "bg-brand-900 text-white hover:bg-brand-800 px-5 py-2.5 text-sm"),
-  outline: cn(base, "border border-brand-900/20 text-brand-900 hover:border-brand-900 px-5 py-2.5 text-sm"),
-  outlineLight: cn(base, "border border-white/25 text-white hover:border-white px-5 py-2.5 text-sm"),
-  lg: "px-7 py-3.5 text-base",
+  gold: cn(base, "bg-gold-400 text-brand-950 shadow-[0_8px_24px_-10px_rgba(201,162,83,.8)] hover:bg-gold-300 px-5 py-2.5 text-sm"),
+  dark: cn(base, "bg-brand-950 text-white shadow-[0_8px_24px_-12px_rgba(11,40,40,.7)] hover:bg-brand-800 px-5 py-2.5 text-sm"),
+  outline: cn(base, "border border-brand-900/15 bg-white text-brand-900 hover:border-brand-900/40 hover:bg-brand-50 px-5 py-2.5 text-sm"),
+  outlineLight: cn(base, "border border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10 hover:border-white/40 px-5 py-2.5 text-sm"),
+  lg: "px-6 py-3.5 text-[0.95rem]",
 };
 
 export function Eyebrow({ children, light }: { children: ReactNode; light?: boolean }) {
@@ -79,12 +79,17 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn("reveal", align === "center" && "mx-auto max-w-2xl text-center", className)}>
-      <p className={cn("flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em]", align === "center" && "justify-center", light ? "text-gold-300" : "text-gold-700")}>
-        {index && <span className={cn("font-display text-base normal-case tracking-normal", light ? "text-white/50" : "text-brand-900/40")}>{index}</span>}
-        {index && <span className={cn("h-px w-8", light ? "bg-white/25" : "bg-brand-900/20")} />}
+      <p
+        className={cn(
+          "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide",
+          light ? "border-white/15 bg-white/5 text-gold-300" : "border-brand-900/10 bg-brand-50 text-brand-800",
+        )}
+      >
+        {index && <span className={cn("tabular-nums", light ? "text-white/50" : "text-brand-900/40")}>{index}</span>}
+        {index && <span className={cn("h-3 w-px", light ? "bg-white/20" : "bg-brand-900/15")} />}
         {eyebrow}
       </p>
-      <h2 className={cn("mt-4 text-4xl leading-[1.05] sm:text-5xl lg:text-[3.5rem]", light ? "text-white" : "text-brand-900")}>{title}</h2>
+      <h2 className={cn("mt-5 text-[2.3rem] leading-[1.05] sm:text-5xl lg:text-[3.4rem]", light ? "text-white" : "text-brand-950")}>{title}</h2>
       {intro && <p className={cn("mt-5 max-w-xl text-base leading-relaxed sm:text-lg", align === "center" && "mx-auto", light ? "text-white/70" : "text-muted")}>{intro}</p>}
     </div>
   );

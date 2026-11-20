@@ -31,7 +31,7 @@ export function PostsPanel({ posts, query, call, onChanged, onEdit }: { posts: P
               // eslint-disable-next-line @next/next/no-img-element -- admin thumbnail
               <img src={p.coverUrl} alt="" className="h-full w-full object-cover" />
             ) : (
-              <span className="absolute inset-0 grid place-items-center px-2 text-center font-display text-sm text-gold-300 italic">{p.category}</span>
+              <span className="absolute inset-0 grid place-items-center px-2 text-center font-display text-sm text-shine-light">{p.category}</span>
             )}
           </div>
           <div className="min-w-0 flex-1">

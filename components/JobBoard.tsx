@@ -41,7 +41,7 @@ function Option({ active, label, n, onClick }: { active: boolean; label: string;
 
 export function JobBoard({ jobs }: { jobs: JobDTO[] }) {
   const params = useSearchParams();
-  const [q, setQ] = useState(params.get("q") ?? "");
+  const [q, setQ] = useState([params.get("q"), params.get("loc")].filter(Boolean).join(" "));
   const [industry, setIndustry] = useState(params.get("industry") ?? "All");
   const [type, setType] = useState(params.get("type") ?? "All");
 

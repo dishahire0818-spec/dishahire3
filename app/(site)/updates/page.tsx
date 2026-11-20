@@ -21,7 +21,7 @@ export default function UpdatesPage() {
             <Link href="/" className="hover:text-brand-900">Home</Link> <span className="mx-1.5">/</span> <span className="text-brand-900">Updates</span>
           </nav>
           <h1 className="enter mt-6 max-w-3xl text-5xl leading-[0.98] text-brand-900 sm:text-7xl" style={{ animationDelay: "80ms" }}>
-            Updates &amp; <span className="italic text-gold-700">insights</span>
+            Updates &amp; <span className="text-shine">insights</span>
           </h1>
           <p className="enter mt-6 max-w-xl text-lg text-muted" style={{ animationDelay: "160ms" }}>
             Company news, hiring tips for employers and practical career advice for job seekers.

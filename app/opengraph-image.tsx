@@ -17,7 +17,7 @@ export default function OgImage() {
           padding: 72,
           background: "#103838",
           color: "white",
-          fontFamily: "Georgia, serif",
+          fontFamily: "sans-serif", fontWeight: 700, letterSpacing: "-0.03em",
         }}
       >
         <div style={{ display: "flex", fontSize: 44 }}>
@@ -25,7 +25,7 @@ export default function OgImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 96, lineHeight: 1.02 }}>Right talent,</div>
-          <div style={{ fontSize: 96, lineHeight: 1.02, color: "#d9bb73", fontStyle: "italic" }}>right direction.</div>
+          <div style={{ fontSize: 96, lineHeight: 1.02, color: "#d9bb73" }}>right direction.</div>
         </div>
         <div style={{ display: "flex", fontSize: 28, color: "rgba(255,255,255,.75)", fontFamily: "sans-serif" }}>
           Recruitment consultancy · Rajkot, Gujarat · 15 industries

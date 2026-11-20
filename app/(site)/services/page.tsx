@@ -32,7 +32,7 @@ export default function ServicesPage() {
             <Link href="/" className="hover:text-white">Home</Link> <span className="mx-1.5">/</span> <span className="text-white">Services</span>
           </nav>
           <h1 className="enter mt-5 max-w-4xl text-5xl leading-[1.02] sm:text-7xl" style={{ animationDelay: "80ms" }}>
-            Hiring solutions that <span className="italic text-gold-300">fit your goals</span>
+            Hiring solutions that <span className="text-shine-light">fit your goals</span>
           </h1>
           <p className="enter mt-5 max-w-xl text-white/70 sm:text-lg" style={{ animationDelay: "160ms" }}>
             Recruitment, sourcing and HR consultancy, tailored to your business, your timelines and your budget.
@@ -99,7 +99,7 @@ export default function ServicesPage() {
       {/* ENGAGEMENT MODELS */}
       <section className="border-y border-line py-20 sm:py-28">
         <div className="container-page">
-          <SectionHeading index="04" eyebrow="Engagement models" title={<>Pick the hiring model <span className="italic">that fits</span></>} />
+          <SectionHeading index="04" eyebrow="Engagement models" title={<>Pick the hiring model <span className="text-shine">that fits</span></>} />
           <div className="reveal mt-12 overflow-hidden rounded-[2rem] border border-line">
             <table className="w-full text-left">
               <thead className="hidden bg-cream text-xs uppercase tracking-[0.14em] text-muted md:table-header-group">
@@ -128,7 +128,7 @@ export default function ServicesPage() {
       {/* PROCESS */}
       <section className="py-20 sm:py-28">
         <div className="container-page">
-          <SectionHeading index="05" eyebrow="Process" title={<>How an engagement <span className="italic">runs</span></>} />
+          <SectionHeading index="05" eyebrow="Process" title={<>How an engagement <span className="text-shine">runs</span></>} />
           <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {FLOWS.employers.steps.map((s, i) => (
               <li key={s.title} className="reveal relative overflow-hidden rounded-[1.5rem] bg-cream p-7">

@@ -34,7 +34,7 @@ export default async function ContactPage() {
               <Link href="/" className="hover:text-brand-900">Home</Link> <span className="mx-1.5">/</span> <span className="text-brand-900">Contact</span>
             </nav>
             <h1 className="enter mt-6 text-5xl leading-[0.98] text-brand-900 sm:text-7xl" style={{ animationDelay: "80ms" }}>
-              Let&apos;s start a <span className="italic text-gold-700">conversation.</span>
+              Let&apos;s start a <span className="text-shine">conversation.</span>
             </h1>
             <p className="enter mt-6 max-w-md text-lg text-muted" style={{ animationDelay: "160ms" }}>
               Hiring, or looking for your next role? Tell us below. A consultant replies within 24 hours.
@@ -96,7 +96,7 @@ export default async function ContactPage() {
       {/* FAQ */}
       <section className="border-t border-line bg-cream py-20 sm:py-24">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.5fr]">
-          <SectionHeading eyebrow="FAQ" title={<>Common <span className="italic">questions</span></>} intro="Can't find your answer? Message us on WhatsApp during office hours." />
+          <SectionHeading eyebrow="FAQ" title={<>Common <span className="text-shine">questions</span></>} intro="Can't find your answer? Message us on WhatsApp during office hours." />
           <div className="divide-y divide-line border-y border-line">
             {faq.map((f) => (
               <details key={f.q} className="reveal group py-6">

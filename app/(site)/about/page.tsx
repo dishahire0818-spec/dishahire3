@@ -25,7 +25,7 @@ export default function AboutPage() {
               <Link href="/" className="hover:text-brand-900">Home</Link> <span className="mx-1.5">/</span> <span className="text-brand-900">About</span>
             </nav>
             <h1 className="enter mt-6 text-5xl leading-[0.98] text-brand-900 sm:text-7xl" style={{ animationDelay: "80ms" }}>
-              We give hiring a <span className="italic text-gold-700">direction.</span>
+              We give hiring a <span className="text-shine">direction.</span>
             </h1>
             <p className="enter mt-6 max-w-lg text-lg leading-relaxed text-muted" style={{ animationDelay: "160ms" }}>
               DishaHire is a professional recruitment consultancy from Rajkot, Gujarat, bridging the gap between ambitious
@@ -58,7 +58,7 @@ export default function AboutPage() {
       {/* STORY */}
       <section className="border-t border-line bg-cream py-20 sm:py-28">
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.2fr]">
-          <SectionHeading index="01" eyebrow="Who we are" title={<>Hiring built on <span className="italic">trust</span></>} />
+          <SectionHeading index="01" eyebrow="Who we are" title={<>Hiring built on <span className="text-shine">trust</span></>} />
           <div className="reveal space-y-5 text-lg leading-relaxed text-brand-900/80">
             <p>
               Disha Hire is committed to <strong className="font-medium text-brand-900">ethical, transparent and result-oriented hiring</strong>.
@@ -108,7 +108,7 @@ export default function AboutPage() {
       <section className="border-y border-line py-20 sm:py-28">
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <SectionHeading index="02" eyebrow="Foundation" title={<>The values we <span className="italic">hire by</span></>} intro="Five principles that guide every brief we take and every candidate we put forward." />
+            <SectionHeading index="02" eyebrow="Foundation" title={<>The values we <span className="text-shine">hire by</span></>} intro="Five principles that guide every brief we take and every candidate we put forward." />
           </div>
           <ol className="divide-y divide-line border-y border-line">
             {VALUES.map((v, i) => (
@@ -125,7 +125,7 @@ export default function AboutPage() {
       {/* INDUSTRIES */}
       <section className="py-20 sm:py-28">
         <div className="container-page">
-          <SectionHeading index="03" eyebrow="Expertise" title={<>Industries we <span className="italic">serve</span></>} />
+          <SectionHeading index="03" eyebrow="Expertise" title={<>Industries we <span className="text-shine">serve</span></>} />
           <ul className="mt-10 flex flex-wrap gap-2.5">
             {INDUSTRIES.map((i) => (
               <li key={i} className="reveal rounded-full border border-line px-5 py-2.5 text-brand-900 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white">
@@ -139,7 +139,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <CtaSection title={<>Let&apos;s find your <span className="italic text-gold-300">next great hire</span></>} />
+      <CtaSection title={<>Let&apos;s find your <span className="text-shine-light">next great hire</span></>} />
     </>
   );
 }

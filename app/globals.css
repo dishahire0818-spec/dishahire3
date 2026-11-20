@@ -11,6 +11,7 @@
   --color-brand-50: #eef5f3;
   --color-gold-700: #8a6d2a; /* gold text on light backgrounds (AA) */
   --color-gold-500: #b08d3e; /* brand gold: fills, accents */
+  --color-gold-400: #c9a253;
   --color-gold-300: #d9bb73; /* gold text on dark backgrounds (AA) */
   --color-gold-200: #ecdcb0;
   --color-gold-100: #f6eedb;
@@ -18,8 +19,8 @@
   --color-line: #e7e5df;
   --color-muted: #5b6b6a;
 
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 1.25rem;
 }
@@ -36,8 +37,12 @@
   }
   h1, h2, h3, .font-display {
     font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    font-feature-settings: "ss01", "cv11";
+  }
+  body {
+    font-feature-settings: "cv11", "ss01";
   }
   ::selection {
     background: var(--color-gold-200);
@@ -164,4 +169,33 @@
   & a { color: var(--color-gold-700); text-decoration: underline; text-underline-offset: 4px; }
   & a:hover { color: var(--color-brand-900); }
   & blockquote { border-left: 2px solid var(--color-gold-500); padding-left: 1.25em; font-family: var(--font-serif); font-size: 1.6rem; line-height: 1.35; color: var(--color-brand-900); }
+}
+
+/* ---------- Headline accent: brand gradient text ---------- */
+@utility text-shine {
+  background-image: linear-gradient(100deg, var(--color-brand-700) 0%, var(--color-gold-500) 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility text-shine-light {
+  background-image: linear-gradient(100deg, #f3e3b8 0%, var(--color-gold-400) 60%, #e9cf8b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Fine grid lines for dark hero sections */
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(70% 70% at 50% 30%, #000, transparent);
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@utility animate-float {
+  animation: float-y 6s ease-in-out infinite;
 }

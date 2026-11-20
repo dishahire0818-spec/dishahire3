@@ -11,9 +11,9 @@ export function IndustryMarquee({ dark }: { dark?: boolean }) {
     >
       <ul className="flex w-max animate-marquee gap-10 whitespace-nowrap group-hover:[animation-play-state:paused] motion-reduce:animate-none">
         {[...items, ...items].map((name, i) => (
-          <li key={i} aria-hidden={i >= items.length} className="flex items-center gap-10 font-display text-2xl sm:text-3xl">
+          <li key={i} aria-hidden={i >= items.length} className="flex items-center gap-10 text-lg font-medium tracking-tight text-brand-900/75 sm:text-xl">
             {name}
-            <span className="text-base text-gold-500">✦</span>
+            <span className="text-sm text-gold-500">✦</span>
           </li>
         ))}
       </ul>

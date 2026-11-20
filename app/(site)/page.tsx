@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, ArrowUpRight, Check, ClipboardList, Quote, Search, UserPlus, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ClipboardList, MapPin, Quote, Search, UserPlus, Users } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { HeroVisual } from "@/components/home/HeroVisual";
 import { Process } from "@/components/home/Process";
@@ -25,54 +25,81 @@ export default async function HomePage() {
   return (
     <>
       {/* ───────── HERO ───────── */}
-      <section className="relative overflow-hidden">
-        <div className="container-page relative grid items-center gap-14 pt-12 pb-16 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:pt-20 lg:pb-24">
+      <section className="relative overflow-hidden bg-brand-950 text-white">
+        <div className="grid-lines absolute inset-0" aria-hidden />
+        <div className="absolute -top-40 right-[-10%] h-[36rem] w-[36rem] rounded-full bg-gold-500/15 blur-[120px]" aria-hidden />
+        <div className="absolute bottom-[-30%] left-[-10%] h-[30rem] w-[30rem] rounded-full bg-brand-700/40 blur-[120px]" aria-hidden />
+        <div className="container-page relative grid items-center gap-14 pt-14 pb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-12 lg:pt-24 lg:pb-24">
           <div>
-            <Link
-              href="/jobs"
-              className="enter inline-flex items-center gap-2.5 rounded-full border border-line bg-white py-1.5 pr-4 pl-2 text-sm text-brand-900 shadow-sm hover:border-brand-900"
-            >
-              <span className="h-2 w-2 rounded-full bg-gold-500 animate-pulse-dot" />
+            <Link href="/jobs" className="enter inline-flex items-center gap-2.5 rounded-full border border-white/12 bg-white/5 py-1.5 pr-3.5 pl-2 text-sm text-white/85 backdrop-blur hover:border-white/30">
+              <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-dot" />
               Now hiring across Gujarat
-              <ArrowRight size={14} className="text-muted" />
+              <span className="text-white/40">·</span>
+              <span className="font-semibold text-gold-300">View jobs</span>
+              <ArrowRight size={14} className="text-gold-300" />
             </Link>
-            <h1 className="enter mt-7 text-[3.4rem] leading-[0.95] tracking-tight text-brand-900 sm:text-7xl lg:text-[6.2rem]" style={{ animationDelay: "80ms" }}>
-              Right talent,
+            <h1 className="enter mt-7 text-[2.9rem] leading-[1] sm:text-7xl lg:text-[5.4rem]" style={{ animationDelay: "80ms" }}>
+              Right talent.
               <br />
-              <span className="italic text-gold-700">right direction.</span>
+              <span className="text-shine-light">Right direction.</span>
             </h1>
-            <p className="enter mt-7 max-w-lg text-lg leading-relaxed text-muted" style={{ animationDelay: "160ms" }}>
-              DishaHire is a Rajkot-based recruitment consultancy that finds the people your business needs, and helps job
-              seekers find work worth staying for.
+            <p className="enter mt-6 max-w-xl text-lg leading-relaxed text-white/70" style={{ animationDelay: "160ms" }}>
+              DishaHire finds the people your business needs, and helps job seekers find work worth staying for. Screened
+              shortlists in days, not weeks.
             </p>
-            <div className="enter mt-9 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "240ms" }}>
-              <Link href="/contact?type=employer" className={cn(btn.dark, btn.lg)}>
-                Hire talent <ArrowRight size={18} />
-              </Link>
-              <Link href="/jobs" className={cn(btn.outline, btn.lg)}>
-                <Search size={17} /> Find a job
+
+            {/* search */}
+            <form action="/jobs" method="get" className="enter mt-9 flex max-w-xl flex-col gap-2 rounded-2xl bg-white p-2 shadow-[0_30px_80px_-30px_rgba(0,0,0,.7)] sm:flex-row sm:items-center sm:rounded-full" style={{ animationDelay: "240ms" }}>
+              <label className="flex flex-1 items-center gap-2.5 px-3 py-1.5 sm:pl-4">
+                <Search size={18} className="shrink-0 text-muted" aria-hidden />
+                <span className="sr-only">Job title or skill</span>
+                <input name="q" placeholder="Job title or skill" className="min-w-0 flex-1 bg-transparent py-2 text-[0.95rem] text-brand-950 outline-none placeholder:text-muted" />
+              </label>
+              <span className="hidden h-7 w-px bg-line sm:block" aria-hidden />
+              <label className="flex items-center gap-2.5 px-3 py-1.5 sm:w-44">
+                <MapPin size={17} className="shrink-0 text-muted" aria-hidden />
+                <span className="sr-only">City</span>
+                <input name="loc" placeholder="City" className="min-w-0 flex-1 bg-transparent py-2 text-[0.95rem] text-brand-950 outline-none placeholder:text-muted" />
+              </label>
+              <button type="submit" className={cn(btn.dark, "h-12 shrink-0 px-6 whitespace-nowrap")}>Search jobs</button>
+            </form>
+            <div className="enter mt-5 flex flex-wrap items-center gap-2 text-sm" style={{ animationDelay: "300ms" }}>
+              <span className="text-white/50">Popular:</span>
+              {["Sales", "Accounts", "Engineer", "HR", "IT"].map((p) => (
+                <Link key={p} href={`/jobs?q=${encodeURIComponent(p)}`} className="rounded-full border border-white/12 px-3 py-1 text-white/75 transition-colors hover:border-gold-300/60 hover:text-white">
+                  {p}
+                </Link>
+              ))}
+              <span className="mx-1 text-white/25">|</span>
+              <Link href="/contact?type=employer" className="inline-flex items-center gap-1 font-semibold text-gold-300 hover:text-gold-200">
+                Hiring? Talk to us <ArrowRight size={14} />
               </Link>
             </div>
-            <dl className="enter mt-12 grid max-w-lg grid-cols-3 divide-x divide-line border-t border-line pt-6" style={{ animationDelay: "320ms" }}>
-              {stats.slice(0, 3).map((st) => [`${st.value}${st.unit ? ` ${st.unit}` : ""}`, st.label]).map(([v, l]) => (
-                <div key={l} className="px-4 first:pl-0">
-                  <dt className="sr-only">{l}</dt>
-                  <dd>
-                    <span className="block font-display text-3xl text-brand-900">{v}</span>
-                    <span className="text-sm text-muted">{l}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
           </div>
           <HeroVisual />
         </div>
-        <IndustryMarquee />
+
+        {/* stats strip */}
+        <div className="relative border-t border-white/10">
+          <dl className="container-page grid grid-cols-2 lg:grid-cols-4">
+            {stats.map((st, i) => (
+              <div key={st.label + i} className={cn("px-1 py-7 sm:px-6", i > 0 && "lg:border-l lg:border-white/10", i % 2 === 1 && "border-l border-white/10", i >= 2 && "border-t border-white/10 lg:border-t-0")}>
+                <dt className="sr-only">{st.label}</dt>
+                <dd>
+                  <span className="font-display text-4xl text-white sm:text-5xl">{st.value}</span>
+                  {st.unit && <span className="ml-1.5 text-lg font-semibold text-gold-300">{st.unit}</span>}
+                  <span className="mt-1 block text-sm text-white/55">{st.label}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
+      <IndustryMarquee />
 
       {/* ───────── TWO PATHS ───────── */}
       <section className="container-page py-20 sm:py-28">
-        <SectionHeading index="01" eyebrow="Two ways we help" title={<>One consultancy, <span className="italic">both sides</span> of the table</>} />
+        <SectionHeading index="01" eyebrow="Two ways we help" title={<>One consultancy, <span className="text-shine">both sides</span> of the table</>} />
         <div className="mt-12 grid gap-5 lg:grid-cols-2">
           <article className="reveal relative flex flex-col overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white sm:p-12">
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-300">For employers</p>
@@ -109,26 +136,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ───────── STATS BAND ───────── */}
-      <section className="border-y border-line bg-cream">
-        <dl className="container-page grid grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => (
-            <div key={s.label + i} className={cn("reveal px-2 py-10 sm:px-8 sm:py-14", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line lg:border-t-0", i === 2 && "lg:border-l")}>
-              <dt className="sr-only">{s.label}</dt>
-              <dd>
-                <span className="font-display text-6xl leading-none text-brand-900 sm:text-7xl">{s.value}</span>
-                {s.unit && <span className="ml-1.5 font-display text-2xl text-gold-700 italic">{s.unit}</span>}
-                <span className="mt-3 block text-sm text-muted">{s.label}</span>
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
       {/* ───────── PROCESS ───────── */}
       <section className="container-page py-20 sm:py-28">
         <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
-          <SectionHeading index="02" eyebrow="How it works" title={<>A clear path from <span className="italic">hello</span> to hired</>} />
+          <SectionHeading index="02" eyebrow="How it works" title={<>A clear path from <span className="text-shine">hello</span> to hired</>} />
         </div>
         <div className="mt-10">
           <Process />
@@ -139,7 +150,7 @@ export default async function HomePage() {
       <section className="bg-cream py-20 sm:py-28">
         <div className="container-page">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <SectionHeading index="03" eyebrow="Services" title={<>Everything you need<br />to hire <span className="italic">smarter</span></>} />
+            <SectionHeading index="03" eyebrow="Services" title={<>Everything you need<br />to hire <span className="text-shine">smarter</span></>} />
             <Link href="/services" className={cn(btn.outline, "reveal self-start bg-white lg:self-auto")}>All services <ArrowRight size={16} /></Link>
           </div>
           <div className="mt-12 grid gap-4 lg:grid-cols-6 lg:grid-rows-[auto_auto]">
@@ -198,7 +209,7 @@ export default async function HomePage() {
       {/* ───────── LATEST JOBS ───────── */}
       <section className="container-page py-20 sm:py-28">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <SectionHeading index="04" eyebrow="Now hiring" title={<>Latest <span className="italic">openings</span></>} />
+          <SectionHeading index="04" eyebrow="Now hiring" title={<>Latest <span className="text-shine">openings</span></>} />
           <Link href="/jobs" className={cn(btn.outline, "reveal self-start sm:self-auto")}>View all jobs <ArrowRight size={16} /></Link>
         </div>
         <div className="mt-10">
@@ -215,12 +226,12 @@ export default async function HomePage() {
             <Image src={PHOTOS.office} alt="The DishaHire team at work" fill sizes="(min-width:1024px) 45vw, 100vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/10 to-transparent" />
             <div className="absolute right-6 bottom-6 left-6 rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
-              <p className="font-display text-3xl">દિશા <span className="text-white/50">·</span> <span className="italic text-gold-300">Disha</span></p>
+              <p className="font-display text-3xl">દિશા <span className="text-white/50">·</span> <span className="text-shine-light">Disha</span></p>
               <p className="mt-1 text-sm text-white/75">means &ldquo;direction&rdquo;. It&apos;s what we try to give every client and every candidate.</p>
             </div>
           </div>
           <div>
-            <SectionHeading index="05" eyebrow="Why DishaHire" title={<>Why companies <span className="italic">choose us</span></>} intro="Smarter hiring, better fits, and a partner who actually picks up the phone." />
+            <SectionHeading index="05" eyebrow="Why DishaHire" title={<>Why companies <span className="text-shine">choose us</span></>} intro="Smarter hiring, better fits, and a partner who actually picks up the phone." />
             <ol className="mt-10 divide-y divide-line border-y border-line">
               {WHY.map((w, i) => (
                 <li key={w.title} className="reveal grid grid-cols-[3rem_1fr] gap-4 py-6">
@@ -240,7 +251,7 @@ export default async function HomePage() {
       {testimonials.length > 0 && (
         <section className="bg-cream py-20 sm:py-28">
           <div className="container-page">
-            <SectionHeading index="06" eyebrow="Testimonials" title={<>What our clients <span className="italic">say</span></>} />
+            <SectionHeading index="06" eyebrow="Testimonials" title={<>What our clients <span className="text-shine">say</span></>} />
             <ul className={cn("mt-12 grid gap-4", testimonials.length > 1 && "md:grid-cols-2", testimonials.length > 2 && "lg:grid-cols-3")}>
               {testimonials.map((t) => (
                 <li key={t.name + t.quote.slice(0, 20)} className="reveal flex flex-col rounded-[2rem] bg-white p-8 sm:p-10">

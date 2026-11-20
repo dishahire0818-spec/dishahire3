@@ -21,7 +21,7 @@ export default function JobsPage() {
             <Link href="/" className="hover:text-white">Home</Link> <span className="mx-1.5">/</span> <span className="text-white">Jobs</span>
           </nav>
           <h1 className="enter mt-5 max-w-3xl text-5xl leading-[1.02] sm:text-7xl" style={{ animationDelay: "80ms" }}>
-            Find a role that moves you <span className="italic text-gold-300">forward</span>
+            Find a role that moves you <span className="text-shine-light">forward</span>
           </h1>
           <p className="enter mt-5 max-w-xl text-white/70 sm:text-lg" style={{ animationDelay: "160ms" }}>
             Curated openings from our client companies. Apply online in two minutes. We never charge candidates.

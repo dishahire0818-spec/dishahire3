@@ -49,12 +49,12 @@ function HeaderView({ pathname, contact }: { pathname: string | null; contact: H
     <>
     <header
       className={cn(
-        "sticky top-0 z-50 bg-white/90 backdrop-blur transition-shadow",
-        scrolled ? "shadow-[0_1px_0_0_var(--color-line)]" : "",
+        "sticky top-0 z-50 bg-brand-950 text-white transition-shadow",
+        scrolled ? "shadow-[0_1px_0_0_rgba(255,255,255,.08)]" : "",
       )}
     >
       <div className="container-page flex h-16 items-center justify-between gap-6 sm:h-[4.5rem]">
-        <Logo />
+        <Logo light />
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {NAV.map((l) => (
             <Link
@@ -62,7 +62,7 @@ function HeaderView({ pathname, contact }: { pathname: string | null; contact: H
               href={l.href}
               className={cn(
                 "rounded-full px-3.5 py-2 text-sm transition-colors",
-                isActive(l.href) ? "bg-brand-50 font-medium text-brand-900" : "text-muted hover:text-brand-900",
+                isActive(l.href) ? "bg-white/10 font-medium text-white" : "text-white/65 hover:text-white",
               )}
             >
               {l.name}
@@ -70,17 +70,17 @@ function HeaderView({ pathname, contact }: { pathname: string | null; contact: H
           ))}
         </nav>
         <div className="hidden items-center gap-2 md:flex">
-          <Link href="/jobs" className="px-3 py-2 text-sm text-brand-900 hover:text-gold-700">
+          <Link href="/jobs" className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white">
             Find a job
           </Link>
-          <Link href="/contact?type=employer" className={btn.dark}>
+          <Link href="/contact?type=employer" className={btn.gold}>
             Hire talent
           </Link>
         </div>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="-mr-2 rounded-full p-2 text-brand-900 md:hidden"
+          className="-mr-2 rounded-full p-2 text-white md:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
