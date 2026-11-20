@@ -4,27 +4,29 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { CONTACT, NAV } from "@/lib/site";
+import { NAV } from "@/lib/site";
 import { Logo } from "./Logo";
 import { btn, cn, WhatsAppIcon } from "./ui";
 
 /** The active-link state needs the URL, so it streams in; the fallback is the same header without highlighting. */
-export function Header() {
+export type HeaderContact = { phone: string; phoneHref: string; whatsappUrl: string };
+
+export function Header({ contact }: { contact: HeaderContact }) {
   return (
     <>
-      <Suspense fallback={<HeaderView pathname={null} />}>
-      <HeaderWithPath />
+      <Suspense fallback={<HeaderView pathname={null} contact={contact} />}>
+      <HeaderWithPath contact={contact} />
       </Suspense>
     </>
   );
 }
 
 
-function HeaderWithPath() {
-  return <HeaderView pathname={usePathname()} />;
+function HeaderWithPath({ contact }: { contact: HeaderContact }) {
+  return <HeaderView pathname={usePathname()} contact={contact} />;
 }
 
-function HeaderView({ pathname }: { pathname: string | null }) {
+function HeaderView({ pathname, contact }: { pathname: string | null; contact: HeaderContact }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -121,8 +123,8 @@ function HeaderView({ pathname }: { pathname: string | null }) {
             </Link>
           </div>
           <div className="mt-auto flex items-center justify-between pt-10 text-sm text-muted">
-            <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
-            <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-brand-900">
+            <a href={contact.phoneHref}>{contact.phone}</a>
+            <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-brand-900">
               <WhatsAppIcon size={15} /> WhatsApp
             </a>
           </div>

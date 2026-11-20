@@ -5,7 +5,7 @@ import { ArrowUpRight, ChevronDown, Clock, Mail, MapPin, Phone } from "lucide-re
 import { ContactTabs } from "@/components/ContactTabs";
 import { JsonLd } from "@/components/JsonLd";
 import { SectionHeading, WhatsAppIcon } from "@/components/ui";
-import { CONTACT, FAQ } from "@/lib/site";
+import { contactLinks, getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -14,13 +14,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-const QUICK = [
-  { icon: WhatsAppIcon, label: "WhatsApp", value: "Chat with a consultant", href: CONTACT.whatsapp, external: true, tone: "bg-brand-900 text-white", iconTone: "bg-gold-500 text-brand-950" },
-  { icon: Phone, label: "Call us", value: CONTACT.phone, href: CONTACT.phoneHref, tone: "bg-white border border-line text-brand-900", iconTone: "bg-brand-900 text-gold-300" },
-  { icon: Mail, label: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}`, tone: "bg-white border border-line text-brand-900", iconTone: "bg-brand-900 text-gold-300" },
+
+export default async function ContactPage() {
+  const { contact, faq } = await getSettings();
+  const links = contactLinks(contact);
+  const QUICK = [
+    { icon: WhatsAppIcon, label: "WhatsApp", value: "Chat with a consultant", href: links.whatsappUrl, external: true, tone: "bg-brand-900 text-white", iconTone: "bg-gold-500 text-brand-950" },
+    { icon: Phone, label: "Call us", value: contact.phone, href: links.phoneHref, tone: "bg-white border border-line text-brand-900", iconTone: "bg-brand-900 text-gold-300" },
+    { icon: Mail, label: "Email", value: contact.email, href: links.mailto, tone: "bg-white border border-line text-brand-900", iconTone: "bg-brand-900 text-gold-300" },
 ];
 
-export default function ContactPage() {
   return (
     <>
       {/* HERO: headline + quick contact actions */}
@@ -71,9 +74,9 @@ export default function ContactPage() {
           <div className="relative overflow-hidden rounded-[2rem] bg-brand-900 p-7 text-white">
             <h2 className="text-3xl">Visit or call</h2>
             <ul className="mt-6 space-y-5 text-sm">
-              <li className="flex gap-3"><MapPin size={18} className="shrink-0 text-gold-300" /><span><span className="block text-white/55">Office</span>{CONTACT.address}</span></li>
-              <li className="flex gap-3"><Clock size={18} className="shrink-0 text-gold-300" /><span><span className="block text-white/55">Hours</span>{CONTACT.hours}</span></li>
-              <li className="flex gap-3"><Phone size={18} className="shrink-0 text-gold-300" /><span><span className="block text-white/55">Phone</span><a href={CONTACT.phoneHref} className="hover:text-gold-300">{CONTACT.phone}</a></span></li>
+              <li className="flex gap-3"><MapPin size={18} className="shrink-0 text-gold-300" /><span><span className="block text-white/55">Office</span>{contact.address}</span></li>
+              <li className="flex gap-3"><Clock size={18} className="shrink-0 text-gold-300" /><span><span className="block text-white/55">Hours</span>{contact.hours}</span></li>
+              <li className="flex gap-3"><Phone size={18} className="shrink-0 text-gold-300" /><span><span className="block text-white/55">Phone</span><a href={links.phoneHref} className="hover:text-gold-300">{contact.phone}</a></span></li>
             </ul>
           </div>
           <div className="rounded-[2rem] bg-gold-100 p-7">
@@ -95,7 +98,7 @@ export default function ContactPage() {
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.5fr]">
           <SectionHeading eyebrow="FAQ" title={<>Common <span className="italic">questions</span></>} intro="Can't find your answer? Message us on WhatsApp during office hours." />
           <div className="divide-y divide-line border-y border-line">
-            {FAQ.map((f) => (
+            {faq.map((f) => (
               <details key={f.q} className="reveal group py-6">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-left font-display text-2xl text-brand-900 [&::-webkit-details-marker]:hidden">
                   {f.q}
@@ -113,7 +116,7 @@ export default function ContactPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+          mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
         }}
       />
     </>

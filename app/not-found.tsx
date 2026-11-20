@@ -2,11 +2,14 @@ import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { btn, Compass } from "@/components/ui";
+import { contactLinks, getSettings } from "@/lib/settings";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const { contact } = await getSettings();
+  const links = contactLinks(contact);
   return (
     <>
-      <Header />
+      <Header contact={{ phone: contact.phone, phoneHref: links.phoneHref, whatsappUrl: links.whatsappUrl }} />
       <main id="main" className="flex-1">
         <section className="container-page relative py-28 text-center sm:py-36">
           <Compass spin className="absolute top-6 left-1/2 h-80 w-80 -translate-x-1/2 opacity-60" />

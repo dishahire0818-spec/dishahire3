@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, ArrowUpRight, Check, ClipboardList, Search, UserPlus, Users } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ClipboardList, Quote, Search, UserPlus, Users } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { HeroVisual } from "@/components/home/HeroVisual";
 import { Process } from "@/components/home/Process";
@@ -9,14 +9,9 @@ import { JobRow, JobRowSkeleton } from "@/components/JobRow";
 import { IndustryMarquee } from "@/components/Marquee";
 import { btn, cn, SectionHeading } from "@/components/ui";
 import { getOpenJobs } from "@/lib/data";
+import { getSettings } from "@/lib/settings";
 import { PHOTOS, SERVICES } from "@/lib/site";
 
-const STATS = [
-  { value: "15", label: "industries served" },
-  { value: "3–5", unit: "days", label: "to your first shortlist" },
-  { value: "₹0", label: "fees for job seekers" },
-  { value: "24", unit: "hrs", label: "reply to every enquiry" },
-];
 
 const WHY = [
   { title: "Ethical & transparent", body: "Clear communication at every step, and no fees for candidates. Ever." },
@@ -25,7 +20,8 @@ const WHY = [
   { title: "Built for long-term fit", body: "We hire for alignment, not just to fill a seat, so people stay and grow." },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { stats, testimonials } = await getSettings();
   return (
     <>
       {/* ───────── HERO ───────── */}
@@ -58,11 +54,7 @@ export default function HomePage() {
               </Link>
             </div>
             <dl className="enter mt-12 grid max-w-lg grid-cols-3 divide-x divide-line border-t border-line pt-6" style={{ animationDelay: "320ms" }}>
-              {[
-                ["15", "industries"],
-                ["3–5 days", "to shortlist"],
-                ["₹0", "for candidates"],
-              ].map(([v, l]) => (
+              {stats.slice(0, 3).map((st) => [`${st.value}${st.unit ? ` ${st.unit}` : ""}`, st.label]).map(([v, l]) => (
                 <div key={l} className="px-4 first:pl-0">
                   <dt className="sr-only">{l}</dt>
                   <dd>
@@ -120,8 +112,8 @@ export default function HomePage() {
       {/* ───────── STATS BAND ───────── */}
       <section className="border-y border-line bg-cream">
         <dl className="container-page grid grid-cols-2 lg:grid-cols-4">
-          {STATS.map((s, i) => (
-            <div key={s.label} className={cn("reveal px-2 py-10 sm:px-8 sm:py-14", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line lg:border-t-0", i === 2 && "lg:border-l")}>
+          {stats.map((s, i) => (
+            <div key={s.label + i} className={cn("reveal px-2 py-10 sm:px-8 sm:py-14", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line lg:border-t-0", i === 2 && "lg:border-l")}>
               <dt className="sr-only">{s.label}</dt>
               <dd>
                 <span className="font-display text-6xl leading-none text-brand-900 sm:text-7xl">{s.value}</span>
@@ -243,6 +235,30 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ───────── TESTIMONIALS (only when added in admin) ───────── */}
+      {testimonials.length > 0 && (
+        <section className="bg-cream py-20 sm:py-28">
+          <div className="container-page">
+            <SectionHeading index="06" eyebrow="Testimonials" title={<>What our clients <span className="italic">say</span></>} />
+            <ul className={cn("mt-12 grid gap-4", testimonials.length > 1 && "md:grid-cols-2", testimonials.length > 2 && "lg:grid-cols-3")}>
+              {testimonials.map((t) => (
+                <li key={t.name + t.quote.slice(0, 20)} className="reveal flex flex-col rounded-[2rem] bg-white p-8 sm:p-10">
+                  <Quote size={28} className="text-gold-500" />
+                  <blockquote className="mt-5 flex-1 font-display text-2xl leading-snug text-brand-900">“{t.quote}”</blockquote>
+                  <div className="mt-8 flex items-center gap-3 border-t border-line pt-5">
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-brand-900 font-display text-lg text-gold-300">{t.name.charAt(0)}</span>
+                    <span>
+                      <span className="block font-medium text-brand-900">{t.name}</span>
+                      {t.role && <span className="block text-sm text-muted">{t.role}</span>}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       <CtaSection />
     </>

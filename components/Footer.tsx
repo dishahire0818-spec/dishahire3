@@ -1,15 +1,10 @@
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
-import { CONTACT } from "@/lib/site";
+import { contactLinks, getSettings } from "@/lib/settings";
 import { Logo } from "./Logo";
 import { InstagramIcon, LinkedInIcon, WhatsAppIcon } from "./ui";
 import { Year } from "./Year";
 
-const socials = [
-  { label: "LinkedIn", href: CONTACT.linkedin, Icon: LinkedInIcon },
-  { label: "Instagram", href: CONTACT.instagram, Icon: InstagramIcon },
-  { label: "WhatsApp", href: CONTACT.whatsapp, Icon: WhatsAppIcon },
-];
 
 const COLUMNS = [
   {
@@ -32,12 +27,20 @@ const COLUMNS = [
     title: "Job seekers",
     links: [
       { name: "Browse jobs", href: "/jobs" },
+      { name: "Career advice", href: "/updates" },
       { name: "Submit your resume", href: "/contact?type=candidate" },
     ],
   },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const { contact } = await getSettings();
+  const links = contactLinks(contact);
+  const socials = [
+    { label: "LinkedIn", href: contact.linkedin, Icon: LinkedInIcon },
+    { label: "Instagram", href: contact.instagram, Icon: InstagramIcon },
+    { label: "WhatsApp", href: links.whatsappUrl, Icon: WhatsAppIcon },
+  ].filter((s) => s.href);
   return (
     <footer className="mt-auto border-t border-line bg-white">
       <div className="container-page grid gap-12 py-14 sm:py-16 lg:grid-cols-[1.3fr_2fr]">
@@ -79,12 +82,12 @@ export function Footer() {
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">Contact</p>
             <ul className="mt-4 space-y-2.5 text-sm text-brand-900">
-              <li>{CONTACT.address}</li>
+              <li>{contact.address}</li>
               <li>
-                <a href={CONTACT.phoneHref} className="hover:text-gold-700">{CONTACT.phone}</a>
+                <a href={links.phoneHref} className="hover:text-gold-700">{contact.phone}</a>
               </li>
               <li>
-                <a href={`mailto:${CONTACT.email}`} className="hover:text-gold-700">{CONTACT.email}</a>
+                <a href={links.mailto} className="hover:text-gold-700">{contact.email}</a>
               </li>
             </ul>
           </div>

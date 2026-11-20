@@ -15,6 +15,7 @@ import {
   LayoutDashboard,
   Loader2,
   LogOut,
+  Newspaper,
   Mail,
   Menu,
   Pencil,
@@ -22,18 +23,26 @@ import {
   Plus,
   RefreshCw,
   Search,
+  Settings2,
   Trash2,
   UserRound,
   X,
 } from "lucide-react";
+import type { PostDTO } from "@/lib/posts";
+import type { SiteSettings } from "@/lib/settings";
 import type { JobDTO } from "@/lib/types";
 import { Logo } from "../Logo";
 import { btn, cn } from "../ui";
 import { JobEditor } from "./JobEditor";
+import { Notes, stageField, StagePicker, stagesFor, type Note } from "./Pipeline";
+import { PostEditor, PostsPanel } from "./PostsPanel";
+import { SettingsPanel } from "./SettingsPanel";
 
 type Row = Record<string, string | undefined> & { id: string; createdAt: string };
-type Data = { jobs: JobDTO[]; companies: Row[]; candidates: Row[]; applications: Row[]; loadedAt: number };
-type Tab = "overview" | "jobs" | "applications" | "companies" | "candidates";
+type Data = { jobs: JobDTO[]; companies: Row[]; candidates: Row[]; applications: Row[]; posts: PostDTO[]; settings: SiteSettings; loadedAt: number };
+type Kind = "company" | "candidate" | "application";
+const notesOf = (r: Row) => ((r as unknown as { notes?: Note[] }).notes ?? []);
+type Tab = "overview" | "jobs" | "applications" | "companies" | "candidates" | "posts" | "content";
 
 const TABS: { id: Tab; label: string; icon: typeof Briefcase }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -41,6 +50,8 @@ const TABS: { id: Tab; label: string; icon: typeof Briefcase }[] = [
   { id: "applications", label: "Applications", icon: FileText },
   { id: "companies", label: "Employer enquiries", icon: Building2 },
   { id: "candidates", label: "Candidate profiles", icon: UserRound },
+  { id: "posts", label: "Updates", icon: Newspaper },
+  { id: "content", label: "Website content", icon: Settings2 },
 ];
 
 export const fmtDate = (iso: string, time = false) =>
@@ -76,6 +87,8 @@ export function Dashboard() {
   const [editing, setEditing] = useState<JobDTO | "new" | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [jobFilter, setJobFilter] = useState("all");
+  const [stageFilter, setStageFilter] = useState("all");
+  const [editingPost, setEditingPost] = useState<PostDTO | "new" | null>(null);
 
   const fetchData = useCallback(async (): Promise<Data | null> => {
     const res = await fetch("/api/admin/data", { cache: "no-store" });
@@ -111,6 +124,7 @@ export function Dashboard() {
   const go = (t: Tab) => {
     setTab(t);
     setQuery("");
+    setStageFilter("all");
     setMenu(false);
   };
 
@@ -135,6 +149,21 @@ export function Dashboard() {
       alert((err as Error).message);
     }
   }
+
+  /** Pipeline change on one record; updates it in place without reloading everything. */
+  async function patchRecord(kind: Kind, id: string, body: Record<string, string>) {
+    try {
+      const out = (await call(`/api/admin/records/${kind}/${id}`, "PATCH", body)) as { record: Row };
+      const key = kind === "company" ? "companies" : kind === "candidate" ? "candidates" : "applications";
+      setData((d) => (d ? { ...d, [key]: d[key].map((r) => (r.id === id ? out.record : r)) } : d));
+    } catch (err) {
+      alert((err as Error).message);
+      throw err;
+    }
+  }
+
+  const byStage = (kind: Kind, rows: Row[]) =>
+    stageFilter === "all" ? rows : rows.filter((r) => (r[stageField(kind)] ?? "new") === stageFilter);
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -205,6 +234,11 @@ export function Dashboard() {
               <Plus size={16} /> Post a job
             </button>
           )}
+          {tab === "posts" && (
+            <button type="button" onClick={() => setEditingPost("new")} className={btn.dark}>
+              <Plus size={16} /> New update
+            </button>
+          )}
         </header>
 
         {error && (
@@ -217,7 +251,7 @@ export function Dashboard() {
           </div>
         ) : (
           <>
-            {tab !== "overview" && (
+            {tab !== "overview" && tab !== "content" && (
               <div className="mb-5 flex flex-wrap items-center gap-3">
                 <label className="flex min-w-60 flex-1 items-center gap-2 rounded-xl border border-line bg-white px-3">
                   <Search size={16} className="text-muted" />
@@ -253,7 +287,22 @@ export function Dashboard() {
               </div>
             )}
 
+            {(tab === "applications" || tab === "candidates" || tab === "companies") && (
+              <StageFilter
+                kind={tab === "companies" ? "company" : tab === "candidates" ? "candidate" : "application"}
+                rows={tab === "companies" ? data.companies : tab === "candidates" ? data.candidates : data.applications.filter((r) => jobFilter === "all" || r.jobId === jobFilter)}
+                value={stageFilter}
+                onChange={setStageFilter}
+              />
+            )}
+
             {tab === "overview" && <Overview data={data} go={go} />}
+
+            {tab === "posts" && <PostsPanel posts={data.posts} query={query} call={call} onChanged={load} onEdit={(p) => setEditingPost(p)} />}
+
+            {tab === "content" && (
+              <SettingsPanel initial={data.settings} call={call} onSaved={(next) => setData((d) => (d ? { ...d, settings: next } : d))} />
+            )}
 
             {tab === "jobs" && (
               <JobsTable
@@ -286,11 +335,11 @@ export function Dashboard() {
 
             {tab === "applications" && (
               <Records
-                rows={data.applications.filter(
+                rows={byStage("application", data.applications.filter(
                   (r) => (jobFilter === "all" || r.jobId === jobFilter) && matches(query, r.name, r.email, r.jobTitle, r.location, r.mobile),
-                )}
+                ))}
                 empty="No applications yet."
-                csv={["applications", [["createdAt", "Date"], ["jobTitle", "Job"], ["name", "Name"], ["email", "Email"], ["mobile", "Mobile"], ["location", "City"], ["experience", "Experience"], ["noticePeriod", "Notice period"], ["message", "Message"]]]}
+                csv={["applications", [["createdAt", "Date"], ["stage", "Stage"], ["jobTitle", "Job"], ["name", "Name"], ["email", "Email"], ["mobile", "Mobile"], ["location", "City"], ["experience", "Experience"], ["noticePeriod", "Notice period"], ["message", "Message"]]]}
                 render={(r) => (
                   <RecordCard
                     key={r.id}
@@ -301,6 +350,7 @@ export function Dashboard() {
                     phone={r.mobile}
                     resumeId={r.resumeId}
                     onDelete={() => removeRecord("application", r.id, `${r.name}'s application`)}
+                    pipeline={{ kind: "application", value: r.stage ?? "new", notes: notesOf(r), onPatch: (b) => patchRecord("application", r.id, b) }}
                     fields={[
                       ["City", r.location],
                       ["Experience", r.experience],
@@ -314,9 +364,9 @@ export function Dashboard() {
 
             {tab === "companies" && (
               <Records
-                rows={data.companies.filter((r) => matches(query, r.companyName, r.contactName, r.email, r.industry, r.address))}
+                rows={byStage("company", data.companies.filter((r) => matches(query, r.companyName, r.contactName, r.email, r.industry, r.address)))}
                 empty="No employer enquiries yet."
-                csv={["employer-enquiries", [["createdAt", "Date"], ["companyName", "Company"], ["companyType", "Type"], ["industry", "Industry"], ["address", "Location"], ["contactName", "Contact"], ["designation", "Designation"], ["email", "Email"], ["mobile", "Mobile"], ["alternateNumber", "Alternate"], ["website", "Website"], ["requirement", "Requirement"]]]}
+                csv={["employer-enquiries", [["createdAt", "Date"], ["status", "Status"], ["companyName", "Company"], ["companyType", "Type"], ["industry", "Industry"], ["address", "Location"], ["contactName", "Contact"], ["designation", "Designation"], ["email", "Email"], ["mobile", "Mobile"], ["alternateNumber", "Alternate"], ["website", "Website"], ["requirement", "Requirement"]]]}
                 render={(r) => (
                   <RecordCard
                     key={r.id}
@@ -326,6 +376,7 @@ export function Dashboard() {
                     email={r.email}
                     phone={r.mobile}
                     onDelete={() => removeRecord("company", r.id, `the enquiry from ${r.companyName}`)}
+                    pipeline={{ kind: "company", value: r.status ?? "new", notes: notesOf(r), onPatch: (b) => patchRecord("company", r.id, b) }}
                     fields={[
                       ["Contact", [r.contactName, r.designation].filter(Boolean).join(", ")],
                       ["Location", r.address],
@@ -340,9 +391,9 @@ export function Dashboard() {
 
             {tab === "candidates" && (
               <Records
-                rows={data.candidates.filter((r) => matches(query, r.name, r.email, r.preferredRole, r.qualification, r.location, r.mobile))}
+                rows={byStage("candidate", data.candidates.filter((r) => matches(query, r.name, r.email, r.preferredRole, r.qualification, r.location, r.mobile)))}
                 empty="No candidate profiles yet."
-                csv={["candidates", [["createdAt", "Date"], ["name", "Name"], ["email", "Email"], ["mobile", "Mobile"], ["location", "City"], ["qualification", "Qualification"], ["passingYear", "Passing year"], ["preferredRole", "Preferred role"], ["preferredIndustry", "Preferred industry"], ["experience", "Experience"], ["noticePeriod", "Notice period"], ["expectedSalary", "Expected salary"], ["dob", "Date of birth"]]]}
+                csv={["candidates", [["createdAt", "Date"], ["stage", "Stage"], ["name", "Name"], ["email", "Email"], ["mobile", "Mobile"], ["location", "City"], ["qualification", "Qualification"], ["passingYear", "Passing year"], ["preferredRole", "Preferred role"], ["preferredIndustry", "Preferred industry"], ["experience", "Experience"], ["noticePeriod", "Notice period"], ["expectedSalary", "Expected salary"], ["dob", "Date of birth"]]]}
                 render={(r) => (
                   <RecordCard
                     key={r.id}
@@ -353,6 +404,7 @@ export function Dashboard() {
                     phone={r.mobile}
                     resumeId={r.resumeId}
                     onDelete={() => removeRecord("candidate", r.id, `${r.name}'s profile`)}
+                    pipeline={{ kind: "candidate", value: r.stage ?? "new", notes: notesOf(r), onPatch: (b) => patchRecord("candidate", r.id, b) }}
                     fields={[
                       ["City", r.location],
                       ["Education", r.qualification ? `${r.qualification} (${r.passingYear})` : undefined],
@@ -368,6 +420,18 @@ export function Dashboard() {
           </>
         )}
       </main>
+
+      {editingPost && (
+        <PostEditor
+          post={editingPost === "new" ? null : editingPost}
+          call={call}
+          onClose={() => setEditingPost(null)}
+          onSaved={async () => {
+            setEditingPost(null);
+            await load();
+          }}
+        />
+      )}
 
       {editing && (
         <JobEditor
@@ -414,6 +478,21 @@ function Overview({ data, go }: { data: Data; go: (t: Tab) => void }) {
             <p className="mt-1 text-xs text-muted">{sub}</p>
           </button>
         ))}
+      </div>
+      <div className="rounded-2xl border border-line bg-white p-5 sm:p-6">
+        <h2 className="text-2xl text-brand-900">Candidate pipeline</h2>
+        <p className="mt-1 text-sm text-muted">Applications and candidate profiles by stage.</p>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
+          {stagesFor("candidate").map((st) => {
+            const n = [...data.applications, ...data.candidates].filter((r) => (r.stage ?? "new") === st.id).length;
+            return (
+              <button key={st.id} type="button" onClick={() => go("applications")} className={cn("rounded-xl border p-4 text-left", st.tone)}>
+                <span className="block font-display text-3xl">{n}</span>
+                <span className="text-xs">{st.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
       <div className="rounded-2xl border border-line bg-white p-5 sm:p-6">
         <h2 className="text-2xl text-brand-900">Recent activity</h2>
@@ -528,6 +607,7 @@ function RecordCard({
   fields,
   note,
   onDelete,
+  pipeline,
 }: {
   title: string;
   subtitle?: string;
@@ -538,6 +618,7 @@ function RecordCard({
   fields: [string, string | undefined][];
   note?: string;
   onDelete: () => void;
+  pipeline: { kind: Kind; value: string; notes: Note[]; onPatch: (body: Record<string, string>) => Promise<void> };
 }) {
   return (
     <li className="rounded-2xl border border-line bg-white p-5">
@@ -559,6 +640,7 @@ function RecordCard({
           </div>
         </div>
         <div className="flex items-center gap-2 sm:flex-col sm:items-end">
+          <StagePicker kind={pipeline.kind} value={pipeline.value} onChange={pipeline.onPatch} />
           <span className="text-xs text-muted">{fmtDate(date, true)}</span>
           <div className="flex gap-2">
             {resumeId && (
@@ -583,6 +665,7 @@ function RecordCard({
           ))}
       </dl>
       {note && <p className="mt-3 rounded-xl bg-cream p-3 text-sm whitespace-pre-line text-brand-900">{note}</p>}
+      <Notes notes={pipeline.notes} onPatch={pipeline.onPatch} />
     </li>
   );
 }
@@ -592,6 +675,25 @@ function Empty({ children }: { children: ReactNode }) {
     <div className="grid place-items-center rounded-2xl border border-dashed border-line bg-white p-12 text-center text-sm text-muted">
       <Inbox size={28} className="mb-3 text-gold-700" />
       {children}
+    </div>
+  );
+}
+
+function StageFilter({ kind, rows, value, onChange }: { kind: Kind; rows: Row[]; value: string; onChange: (v: string) => void }) {
+  const field = stageField(kind);
+  const count = (id: string) => rows.filter((r) => (r[field] ?? "new") === id).length;
+  const chip = (active: boolean) =>
+    cn("inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors", active ? "border-brand-900 bg-brand-900 text-white" : "border-line bg-white text-brand-900 hover:border-brand-900");
+  return (
+    <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Filter by stage">
+      <button type="button" className={chip(value === "all")} onClick={() => onChange("all")}>
+        All <span className="opacity-60">{rows.length}</span>
+      </button>
+      {stagesFor(kind).map((st) => (
+        <button key={st.id} type="button" className={chip(value === st.id)} onClick={() => onChange(st.id)}>
+          {st.label} <span className="opacity-60">{count(st.id)}</span>
+        </button>
+      ))}
     </div>
   );
 }

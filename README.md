@@ -15,6 +15,9 @@ One Next.js project serves the public site, the job board, the forms API and the
 | Email alerts | Every application and enquiry is emailed to you (via Resend, optional) |
 | Google for Jobs | `JobPosting` structured data on every job, `sitemap.xml`, `robots.txt`, page metadata, OG image |
 | Admin (`/admin`) | Overview, post/edit/archive/delete jobs, applications (download resumes), employer enquiries, candidate profiles, search, CSV export, delete records |
+| Candidate pipeline | Stages for applications and candidates (New → Shortlisted → Interview → Hired / Not selected), lead status for employer enquiries (New → Contacted → In discussion → Converted / Closed), private notes with date and author, filter by stage |
+| Updates (blog) | Write posts with a cover image in the admin (draft or published); public `/updates` page, article pages with share buttons, Google Article markup, sitemap |
+| Website content | Edit contact details, WhatsApp number, home page numbers, FAQ, testimonials and an optional announcement bar from the admin. Changes go live within seconds |
 | Security | Signed httpOnly session cookie (8 h), scrypt-hashed admin password, every admin API checks the session, login rate limit (5 tries / 15 min per IP), form rate limit, honeypot spam trap, input validation, same-origin checks, security headers, resumes stored privately (admin-only download) |
 
 Existing data is kept: the app reads the same MongoDB collections (`jobs`, `companyenquiries`, `candidateenquiries`) as the old Express backend.
@@ -85,7 +88,8 @@ Then set `USE_LOCAL_IMAGES = true` in `lib/site.ts`. To use your own photos (rec
 
 ## Editing content
 
-- Contact details, industries, services, values, FAQ and photos: `lib/site.ts`
+- Contact details, home numbers, FAQ, testimonials, announcement: **Admin → Website content** (no code needed)
+- Industries, services, values and photos: `lib/site.ts`
 - Colours and fonts: `app/globals.css` (`@theme`) and `app/layout.tsx`
 - Page layouts: `app/(site)/*/page.tsx`
 

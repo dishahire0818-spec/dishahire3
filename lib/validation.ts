@@ -75,3 +75,42 @@ export function formToObject(fd: FormData) {
   for (const [k, v] of fd.entries()) if (typeof v === "string") out[k] = v;
   return out;
 }
+
+const url = z.union([z.literal(""), z.string().trim().max(300).regex(/^https?:\/\/\S+$/, "Links must start with https://")]);
+
+export const recordPatchSchema = z
+  .object({
+    stage: z.enum(["new", "shortlisted", "interview", "hired", "rejected"]).optional(),
+    status: z.enum(["new", "contacted", "discussion", "converted", "closed"]).optional(),
+    note: z.string().trim().min(1).max(2000).optional(),
+    removeNoteId: z.string().regex(/^[a-f\d]{24}$/i).optional(),
+  })
+  .refine((v) => Object.values(v).some((x) => x !== undefined), "Nothing to update");
+
+export const postSchema = z.object({
+  title: required("Title", 160),
+  slug: z.string().trim().max(80).regex(/^[a-z0-9-]*$/, "Slug can only contain lowercase letters, numbers and dashes").optional().default(""),
+  category: required("Category", 60),
+  excerpt: optional(300),
+  content: z.string().max(50000).default(""),
+  coverId: z.union([z.literal(""), z.string().regex(/^[a-f\d]{24}$/i)]).nullable().optional(),
+  status: z.enum(["draft", "published"]).default("draft"),
+});
+
+export const settingsSchema = z.object({
+  contact: z.object({
+    email,
+    phone,
+    whatsapp: z.string().trim().regex(/^\+?[\d\s-]{10,16}$/, "WhatsApp number must include the country code, e.g. 918487998492"),
+    address: required("Address", 200),
+    hours: required("Office hours", 80),
+    linkedin: url,
+    instagram: url,
+  }),
+  stats: z
+    .array(z.object({ value: required("Number", 12), unit: optional(12), label: required("Label", 60) }))
+    .length(4, "Exactly 4 numbers are shown on the home page"),
+  faq: z.array(z.object({ q: required("Question", 200), a: required("Answer", 1500) })).max(20),
+  testimonials: z.array(z.object({ quote: required("Quote", 600), name: required("Name", 80), role: optional(120) })).max(12),
+  announcement: z.object({ text: optional(160), href: z.union([z.literal(""), z.string().trim().max(300).regex(/^(\/|https?:\/\/)\S*$/, "Link must start with / or https://")]) }),
+});

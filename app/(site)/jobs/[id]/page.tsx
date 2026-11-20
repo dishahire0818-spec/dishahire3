@@ -7,7 +7,8 @@ import { ApplyForm } from "@/components/forms/ApplyForm";
 import { JsonLd } from "@/components/JsonLd";
 import { btn, cn, WhatsAppIcon } from "@/components/ui";
 import { getJob } from "@/lib/data";
-import { CONTACT, SITE } from "@/lib/site";
+import { contactLinks, getSettings } from "@/lib/settings";
+import { SITE } from "@/lib/site";
 import type { JobDTO } from "@/lib/types";
 
 export async function generateMetadata({ params }: PageProps<"/jobs/[id]">): Promise<Metadata> {
@@ -98,6 +99,7 @@ async function JobDetail({ params }: { params: PageProps<"/jobs/[id]">["params"]
   const { id } = await params;
   const job = await getJob(id);
   if (!job || job.isArchived) notFound();
+  const whatsappUrl = contactLinks((await getSettings()).contact).whatsappUrl;
 
   const whatsappText = encodeURIComponent(
     `Hi DishaHire team! I'd like to apply for this job:\n\n*Role:* ${job.title}\n*Location:* ${job.location}\n*Salary:* ${job.salary}\n\n${SITE.url}/jobs/${job.id}`,
@@ -134,7 +136,7 @@ async function JobDetail({ params }: { params: PageProps<"/jobs/[id]">["params"]
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a href="#apply" className={cn(btn.gold, btn.lg)}>Apply now</a>
-            <a href={`${CONTACT.whatsapp}?text=${whatsappText}`} target="_blank" rel="noopener noreferrer" className={cn(btn.outlineLight, btn.lg)}>
+            <a href={`${whatsappUrl}?text=${whatsappText}`} target="_blank" rel="noopener noreferrer" className={cn(btn.outlineLight, btn.lg)}>
               <WhatsAppIcon size={18} /> Apply on WhatsApp
             </a>
           </div>
@@ -178,7 +180,7 @@ async function JobDetail({ params }: { params: PageProps<"/jobs/[id]">["params"]
                 Apply now
               </a>
               <a
-                href={`${CONTACT.whatsapp}?text=${whatsappText}`}
+                href={`${whatsappUrl}?text=${whatsappText}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(btn.outlineLight, btn.lg)}
