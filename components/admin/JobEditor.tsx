@@ -17,6 +17,14 @@ const EMPTY = {
   employmentType: "Full-time",
   experience: "",
   otherInfo: "",
+  jobCode: "",
+  openings: "",
+  department: "",
+  workMode: "",
+  timing: "",
+  ageRange: "",
+  skills: "",
+  client: "",
 };
 
 export function JobEditor({
@@ -28,7 +36,7 @@ export function JobEditor({
   job: JobDTO | null;
   onClose: () => void;
   onSaved: () => void;
-  save: (body: typeof EMPTY, id?: string) => Promise<unknown>;
+  save: (body: Record<string, unknown>, id?: string) => Promise<unknown>;
 }) {
   const [form, setForm] = useState(() => (job ? { ...EMPTY, ...pick(job) } : EMPTY));
   const [busy, setBusy] = useState(false);
@@ -61,7 +69,7 @@ export function JobEditor({
             setBusy(true);
             setError("");
             try {
-              await save(form, job?.id);
+              await save({ ...form, openings: form.openings ? Number(form.openings) : null }, job?.id);
               onSaved();
             } catch (err) {
               setError((err as Error).message);
@@ -116,6 +124,44 @@ export function JobEditor({
               <option value="Female">Female</option>
             </select>
           </label>
+          <label>
+            <span className={label}>Number of openings</span>
+            <input type="number" min={1} className={inputCls} value={form.openings} onChange={set("openings")} placeholder="e.g. 4" />
+          </label>
+          <label>
+            <span className={label}>Job code</span>
+            <input maxLength={30} className={inputCls} value={form.jobCode} onChange={set("jobCode")} placeholder="e.g. JD59" />
+          </label>
+          <label>
+            <span className={label}>Work mode</span>
+            <select className={cn(inputCls, "appearance-none")} value={form.workMode} onChange={set("workMode")}>
+              <option value="">Not specified</option>
+              <option>In office</option>
+              <option>Field</option>
+              <option>Remote</option>
+              <option>Hybrid</option>
+            </select>
+          </label>
+          <label>
+            <span className={label}>Timing</span>
+            <input maxLength={60} className={inputCls} value={form.timing} onChange={set("timing")} placeholder="e.g. 10 AM to 7 PM" />
+          </label>
+          <label>
+            <span className={label}>Age range</span>
+            <input maxLength={40} className={inputCls} value={form.ageRange} onChange={set("ageRange")} placeholder="e.g. 18 to 25" />
+          </label>
+          <label>
+            <span className={label}>Department</span>
+            <input maxLength={80} className={inputCls} value={form.department} onChange={set("department")} placeholder="e.g. Sales" />
+          </label>
+          <label className="sm:col-span-2">
+            <span className={label}>Skills required</span>
+            <input maxLength={500} className={inputCls} value={form.skills} onChange={set("skills")} placeholder="e.g. Good communication and sales knowledge" />
+          </label>
+          <label className="sm:col-span-2">
+            <span className={label}>Client company <span className="font-normal text-muted">(private, never shown on the website)</span></span>
+            <input maxLength={120} className={inputCls} value={form.client} onChange={set("client")} placeholder="e.g. SOS Finance" />
+          </label>
           <label className="sm:col-span-2">
             <span className={label}>Job description</span>
             <textarea
@@ -156,5 +202,13 @@ function pick(j: JobDTO) {
     employmentType: j.employmentType,
     experience: j.experience,
     otherInfo: j.otherInfo,
+    jobCode: j.jobCode,
+    openings: j.openings ? String(j.openings) : "",
+    department: j.department,
+    workMode: j.workMode,
+    timing: j.timing,
+    ageRange: j.ageRange,
+    skills: j.skills,
+    client: j.client ?? "",
   };
 }

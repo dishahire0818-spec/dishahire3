@@ -62,6 +62,14 @@ export const jobSchema = z.object({
   employmentType: z.enum(EMPLOYMENT_TYPES).default("Full-time"),
   experience: optional(60),
   otherInfo: optional(5000),
+  jobCode: optional(30),
+  openings: z.coerce.number().int().min(1).max(10000).optional().nullable(),
+  department: optional(80),
+  workMode: optional(40),
+  timing: optional(60),
+  ageRange: optional(40),
+  skills: optional(500),
+  client: optional(120),
   isArchived: z.boolean().optional(),
 });
 

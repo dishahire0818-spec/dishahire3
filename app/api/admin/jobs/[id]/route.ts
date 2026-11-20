@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest, ctx: RouteContext<"/api/admin/jobs
     job.set(sent);
     await job.save();
     revalidateTag(JOBS_TAG, { expire: 0 });
-    return json({ job: toJobDTO(job.toObject()) });
+    return json({ job: toJobDTO(job.toObject(), true) });
   } catch (err) {
     console.error("Update job failed", err);
     return fail("Could not update the job.", 500);

@@ -20,7 +20,10 @@ export function JobRow({ job, meta }: { job: JobDTO; meta?: string }) {
         {initials(job.industry)}
       </span>
       <div className="min-w-0">
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-700">{job.industry}</p>
+        <p className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-gold-700">
+          {job.industry}
+          {job.openings && <span className="rounded-full bg-brand-50 px-2 py-0.5 tracking-normal normal-case text-brand-800">{job.openings} openings</span>}
+        </p>
         <h3 className="mt-1.5 font-display text-2xl leading-tight text-brand-900 sm:text-[1.7rem]">
           <Link href={`/jobs/${job.id}`} className="after:absolute after:inset-0 after:rounded-2xl focus:outline-none">
             {job.title}
@@ -28,7 +31,7 @@ export function JobRow({ job, meta }: { job: JobDTO; meta?: string }) {
         </h3>
         <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-muted">
           <li className="inline-flex items-center gap-1.5"><MapPin size={14} className="text-gold-700" />{job.location}</li>
-          <li className="inline-flex items-center gap-1.5"><Briefcase size={14} className="text-gold-700" />{job.employmentType}{job.experience ? ` · ${job.experience}` : ""}</li>
+          <li className="inline-flex items-center gap-1.5"><Briefcase size={14} className="text-gold-700" />{job.workMode ? `${job.workMode} · ` : ""}{job.experience || job.employmentType}</li>
           <li className="inline-flex items-center gap-1.5"><GraduationCap size={14} className="text-gold-700" />{job.education}</li>
         </ul>
       </div>

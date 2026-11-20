@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     await db();
     const job = await Job.create({ ...parsed.data, isArchived: false });
     revalidateTag(JOBS_TAG, { expire: 0 });
-    return json({ job: toJobDTO(job.toObject()) }, 201);
+    return json({ job: toJobDTO(job.toObject(), true) }, 201);
   } catch (err) {
     console.error("Create job failed", err);
     return fail("Could not create the job.", 500);

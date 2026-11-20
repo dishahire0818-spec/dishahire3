@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { Banknote, Briefcase, CalendarDays, GraduationCap, MapPin, UserRound } from "lucide-react";
+import { Banknote, Building2, Clock, Users, Briefcase, CalendarDays, GraduationCap, MapPin, UserRound } from "lucide-react";
 import { ApplyForm } from "@/components/forms/ApplyForm";
 import { JsonLd } from "@/components/JsonLd";
 import { btn, cn, WhatsAppIcon } from "@/components/ui";
@@ -41,7 +41,8 @@ const EMPLOYMENT_SCHEMA: Record<string, string> = {
 /** Best-effort parse of salary text like "5-8 LPA" or "₹15,000 - ₹20,000 per month". */
 function baseSalary(text: string) {
   const t = text.toLowerCase().replace(/,/g, "");
-  const nums = (t.match(/\d+(\.\d+)?/g) ?? []).map(Number);
+  // "10k" -> 10000
+  const nums = [...t.matchAll(/(\d+(?:\.\d+)?)\s*(k\b)?/g)].map((m) => Number(m[1]) * (m[2] ? 1000 : 1));
   if (nums.length === 0) return undefined;
   const [min, max = min] = nums;
   if (/lpa|lakh|lac/.test(t)) {
@@ -56,13 +57,18 @@ function baseSalary(text: string) {
 function jobPostingLd(job: JobDTO) {
   const created = new Date(job.createdAt);
   const validThrough = new Date(created.getTime() + 60 * 86400000);
-  const [city, region] = job.location.split(",").map((s) => s.trim());
+  // "Area, City, State" | "City, State" | "City"
+  const parts = job.location.split(",").map((s) => s.trim()).filter(Boolean);
+  const [street, city, region] = parts.length >= 3 ? parts : [undefined, parts[0], parts[1]];
   const salary = baseSalary(job.salary);
   const description =
     `<p>${escapeHtml(job.otherInfo || `${job.title} opening in ${job.location}.`).replace(/\n/g, "<br>")}</p>` +
     `<ul><li>Industry: ${escapeHtml(job.industry)}</li><li>Education: ${escapeHtml(job.education)}</li>` +
     (job.experience ? `<li>Experience: ${escapeHtml(job.experience)}</li>` : "") +
-    `<li>Salary: ${escapeHtml(job.salary)}</li></ul>`;
+    `<li>Salary: ${escapeHtml(job.salary)}</li>` +
+    (job.skills ? `<li>Skills: ${escapeHtml(job.skills)}</li>` : "") +
+    (job.timing ? `<li>Timing: ${escapeHtml(job.timing)}</li>` : "") +
+    `</ul>`;
   return {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -77,12 +83,15 @@ function jobPostingLd(job: JobDTO) {
       "@type": "Place",
       address: {
         "@type": "PostalAddress",
+        ...(street ? { streetAddress: street } : {}),
         addressLocality: city || job.location,
         ...(region ? { addressRegion: region } : {}),
         addressCountry: "IN",
       },
     },
     educationRequirements: job.education,
+    ...(job.openings ? { totalJobOpenings: job.openings } : {}),
+    ...(job.skills ? { skills: job.skills } : {}),
     industry: job.industry,
     directApply: true,
     ...(salary
@@ -109,7 +118,10 @@ async function JobDetail({ params }: { params: PageProps<"/jobs/[id]">["params"]
     { icon: Banknote, label: "Salary", value: job.salary },
     { icon: Briefcase, label: "Job type", value: job.employmentType + (job.experience ? ` · ${job.experience}` : "") },
     { icon: GraduationCap, label: "Education", value: job.education },
-    { icon: UserRound, label: "Open to", value: job.gender === "Any" ? "All candidates" : job.gender },
+    { icon: UserRound, label: "Open to", value: (job.gender === "Any" ? "All candidates" : job.gender) + (job.ageRange ? ` · Age ${job.ageRange}` : "") },
+    ...(job.openings ? [{ icon: Users, label: "Openings", value: `${job.openings} position${job.openings > 1 ? "s" : ""}` }] : []),
+    ...(job.workMode ? [{ icon: Building2, label: "Work mode", value: job.workMode }] : []),
+    ...(job.timing ? [{ icon: Clock, label: "Timing", value: job.timing }] : []),
     {
       icon: CalendarDays,
       label: "Posted",
@@ -156,6 +168,13 @@ async function JobDetail({ params }: { params: PageProps<"/jobs/[id]">["params"]
               </div>
             ))}
           </dl>
+
+          {job.skills && (
+            <div>
+              <h2 className="text-3xl text-brand-900">Skills required</h2>
+              <p className="mt-4 leading-relaxed text-muted">{job.skills}</p>
+            </div>
+          )}
 
           {job.otherInfo && (
             <div>

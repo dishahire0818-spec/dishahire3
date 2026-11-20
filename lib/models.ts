@@ -24,6 +24,14 @@ const jobSchema = new Schema({
   employmentType: { ...str, default: "Full-time" },
   experience: str,
   otherInfo: str, // job description
+  jobCode: { ...str, index: true }, // e.g. JD59, from the office Excel sheet
+  openings: { type: Number, min: 1 },
+  department: str,
+  workMode: str, // In office / Field / Remote
+  timing: str,
+  ageRange: str,
+  skills: str,
+  client: str, // PRIVATE: hiring company, admin only (never sent to the public site)
   isArchived: { type: Boolean, default: false, index: true },
   createdAt: { type: Date, default: Date.now, index: true },
 });

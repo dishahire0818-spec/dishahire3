@@ -15,6 +15,7 @@ One Next.js project serves the public site, the job board, the forms API and the
 | Email alerts | Every application and enquiry is emailed to you (via Resend, optional) |
 | Google for Jobs | `JobPosting` structured data on every job, `sitemap.xml`, `robots.txt`, page metadata, OG image |
 | Admin (`/admin`) | Overview, post/edit/archive/delete jobs, applications (download resumes), employer enquiries, candidate profiles, search, CSV export, delete records |
+| Job import | **Admin → Jobs → Import from Excel**: paste rows from the office job sheet (Job code, Title, Openings, Department, Education, Experience, Salary, Location, Work mode, Skills, Timing, Gender, Age, Notes, Description, Company). Existing job codes are updated. Company stays private |
 | Candidate pipeline | Stages for applications and candidates (New → Shortlisted → Interview → Hired / Not selected), lead status for employer enquiries (New → Contacted → In discussion → Converted / Closed), private notes with date and author, filter by stage |
 | Updates (blog) | Write posts with a cover image in the admin (draft or published); public `/updates` page, article pages with share buttons, Google Article markup, sitemap |
 | Website content | Edit contact details, WhatsApp number, home page numbers, FAQ, testimonials and an optional announcement bar from the admin. Changes go live within seconds |

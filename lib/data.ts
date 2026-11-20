@@ -11,8 +11,10 @@ export const JOBS_TAG = "jobs";
 type Nullable<T> = { [K in keyof T]?: T[K] | null };
 type JobDoc = Nullable<Omit<JobDTO, "id" | "createdAt">> & { _id: unknown; createdAt?: Date | string | null };
 
-export function toJobDTO(j: JobDoc): JobDTO {
+/** Public shape by default; pass includePrivate for admin (adds the client company). */
+export function toJobDTO(j: JobDoc, includePrivate = false): JobDTO {
   return {
+    ...(includePrivate ? { client: j.client ?? "" } : {}),
     id: String(j._id),
     title: j.title ?? "",
     education: j.education ?? "",
@@ -23,6 +25,13 @@ export function toJobDTO(j: JobDoc): JobDTO {
     employmentType: (EMPLOYMENT_TYPES as readonly string[]).includes(j.employmentType ?? "") ? j.employmentType! : "Full-time",
     experience: j.experience ?? "",
     otherInfo: j.otherInfo ?? "",
+    jobCode: j.jobCode ?? "",
+    openings: typeof j.openings === "number" && j.openings > 0 ? j.openings : null,
+    department: j.department ?? "",
+    workMode: j.workMode ?? "",
+    timing: j.timing ?? "",
+    ageRange: j.ageRange ?? "",
+    skills: j.skills ?? "",
     isArchived: Boolean(j.isArchived),
     createdAt: new Date(j.createdAt ?? Date.now()).toISOString(),
   };

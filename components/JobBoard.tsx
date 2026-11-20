@@ -61,7 +61,7 @@ export function JobBoard({ jobs }: { jobs: JobDTO[] }) {
   const results = useMemo(() => {
     const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
     return jobs.filter((j) => {
-      const hay = `${j.title} ${j.industry} ${j.location} ${j.education} ${j.otherInfo} ${j.experience}`.toLowerCase();
+      const hay = `${j.title} ${j.industry} ${j.location} ${j.education} ${j.otherInfo} ${j.experience} ${j.department} ${j.skills} ${j.jobCode}`.toLowerCase();
       return terms.every((t) => hay.includes(t)) && (industry === "All" || j.industry === industry) && (type === "All" || j.employmentType === type);
     });
   }, [jobs, q, industry, type]);

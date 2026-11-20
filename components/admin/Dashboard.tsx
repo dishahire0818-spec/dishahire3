@@ -25,6 +25,7 @@ import {
   Search,
   Settings2,
   Trash2,
+  Upload,
   UserRound,
   X,
 } from "lucide-react";
@@ -34,6 +35,7 @@ import type { JobDTO } from "@/lib/types";
 import { Logo } from "../Logo";
 import { btn, cn } from "../ui";
 import { JobEditor } from "./JobEditor";
+import { JobImport } from "./JobImport";
 import { Notes, stageField, StagePicker, stagesFor, type Note } from "./Pipeline";
 import { PostEditor, PostsPanel } from "./PostsPanel";
 import { SettingsPanel } from "./SettingsPanel";
@@ -89,6 +91,7 @@ export function Dashboard() {
   const [jobFilter, setJobFilter] = useState("all");
   const [stageFilter, setStageFilter] = useState("all");
   const [editingPost, setEditingPost] = useState<PostDTO | "new" | null>(null);
+  const [importing, setImporting] = useState(false);
 
   const fetchData = useCallback(async (): Promise<Data | null> => {
     const res = await fetch("/api/admin/data", { cache: "no-store" });
@@ -230,9 +233,14 @@ export function Dashboard() {
             <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> Refresh
           </button>
           {tab === "jobs" && (
-            <button type="button" onClick={() => setEditing("new")} className={btn.dark}>
-              <Plus size={16} /> Post a job
-            </button>
+            <>
+              <button type="button" onClick={() => setImporting(true)} className={cn(btn.outline, "bg-white")}>
+                <Upload size={16} /> Import from Excel
+              </button>
+              <button type="button" onClick={() => setEditing("new")} className={btn.dark}>
+                <Plus size={16} /> Post a job
+              </button>
+            </>
           )}
           {tab === "posts" && (
             <button type="button" onClick={() => setEditingPost("new")} className={btn.dark}>
@@ -306,7 +314,7 @@ export function Dashboard() {
 
             {tab === "jobs" && (
               <JobsTable
-                jobs={data.jobs.filter((j) => (showArchived || !j.isArchived) && matches(query, j.title, j.location, j.industry))}
+                jobs={data.jobs.filter((j) => (showArchived || !j.isArchived) && matches(query, j.title, j.location, j.industry, j.jobCode, j.client))}
                 appCount={appCount}
                 onEdit={(j) => setEditing(j)}
                 onArchive={async (j) => {
@@ -420,6 +428,8 @@ export function Dashboard() {
           </>
         )}
       </main>
+
+      {importing && <JobImport onClose={() => setImporting(false)} onDone={load} />}
 
       {editingPost && (
         <PostEditor
@@ -540,6 +550,9 @@ function JobsTable({
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs text-brand-800">{j.industry}</span>
               {j.isArchived && <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600">Archived</span>}
+              {j.jobCode && <span className="rounded-full border border-line px-2.5 py-0.5 text-xs text-muted">{j.jobCode}</span>}
+              {j.openings && <span className="rounded-full bg-gold-100 px-2.5 py-0.5 text-xs text-brand-900">{j.openings} openings</span>}
+              {j.client && <span className="rounded-full bg-sky-50 px-2.5 py-0.5 text-xs text-sky-800" title="Private: not shown on the website">Client: {j.client}</span>}
             </div>
             <p className="mt-2 font-display text-2xl text-brand-900">{j.title}</p>
             <p className="mt-1 text-sm text-muted">

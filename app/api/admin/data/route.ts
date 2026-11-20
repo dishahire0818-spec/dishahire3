@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const plain = <T extends { _id: unknown }>(rows: T[]) =>
       rows.map(({ _id, ...rest }) => ({ ...JSON.parse(JSON.stringify(rest)), id: String(_id) }));
     return json({
-      jobs: jobs.map((j) => toJobDTO(j as Parameters<typeof toJobDTO>[0])),
+      jobs: jobs.map((j) => toJobDTO(j as Parameters<typeof toJobDTO>[0], true)),
       companies: plain(companies),
       candidates: plain(candidates),
       applications: plain(applications),
