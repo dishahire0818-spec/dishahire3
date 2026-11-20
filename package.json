@@ -28,11 +28,10 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
-    "mongodb-memory-server": "^11.3.0",
     "tailwindcss": "4.3.3",
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=20.9"
+    "node": "22.x"
   }
 }
