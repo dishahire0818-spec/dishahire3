@@ -30,6 +30,6 @@ export async function GET(req: NextRequest) {
     });
   } catch (err) {
     console.error("Admin data failed", err);
-    return fail("Could not load data from the database.", 500);
+    return fail("Can't load data: the database is not connected. Open /api/health to see what to fix in Vercel.", 500);
   }
 }
