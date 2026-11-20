@@ -1,0 +1,77 @@
+import { z } from "zod";
+import { COMPANY_TYPES, EMPLOYMENT_TYPES } from "./site";
+
+const text = (max = 120) => z.string().trim().max(max);
+const required = (label: string, max = 120) => text(max).min(1, `${label} is required`);
+const optional = (max = 120) => text(max).optional().default("");
+const email = z.string().trim().toLowerCase().max(160).email("Enter a valid email address");
+const phone = z
+  .string()
+  .trim()
+  .max(20)
+  .regex(/^[+()\d\s-]{7,20}$/, "Enter a valid phone number");
+
+export const companySchema = z.object({
+  companyName: required("Company name"),
+  companyType: z.enum(COMPANY_TYPES as [string, ...string[]], { message: "Choose a company type" }),
+  industry: required("Industry"),
+  address: required("Company location", 200),
+  contactName: required("Contact name"),
+  designation: optional(),
+  email,
+  mobile: phone,
+  alternateNumber: z.union([z.literal(""), phone]).optional().default(""),
+  website: optional(200),
+  requirement: optional(1500),
+});
+
+export const candidateSchema = z.object({
+  name: required("Full name"),
+  email,
+  mobile: phone,
+  location: required("Current location"),
+  qualification: required("Highest qualification"),
+  passingYear: z.string().trim().regex(/^(19|20)\d{2}$/, "Enter a valid year, e.g. 2022"),
+  preferredRole: required("Preferred role"),
+  preferredIndustry: optional(),
+  experience: optional(40),
+  currentTitle: optional(),
+  expectedSalary: optional(40),
+  noticePeriod: optional(40),
+  dob: optional(20),
+});
+
+export const applicationSchema = z.object({
+  jobId: z.string().regex(/^[a-f\d]{24}$/i, "Invalid job"),
+  name: required("Full name"),
+  email,
+  mobile: phone,
+  location: required("Current location"),
+  experience: optional(40),
+  noticePeriod: optional(40),
+  message: optional(1500),
+});
+
+export const jobSchema = z.object({
+  title: required("Job title"),
+  industry: required("Industry"),
+  location: required("Location"),
+  education: required("Education"),
+  salary: required("Salary"),
+  gender: z.enum(["Any", "Male", "Female"]).default("Any"),
+  employmentType: z.enum(EMPLOYMENT_TYPES).default("Full-time"),
+  experience: optional(60),
+  otherInfo: optional(5000),
+  isArchived: z.boolean().optional(),
+});
+
+export function firstError(err: z.ZodError) {
+  return err.issues[0]?.message ?? "Please check the form and try again.";
+}
+
+/** FormData -> plain object of strings (files skipped). */
+export function formToObject(fd: FormData) {
+  const out: Record<string, string> = {};
+  for (const [k, v] of fd.entries()) if (typeof v === "string") out[k] = v;
+  return out;
+}

@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* DishaHire brand */
+  --color-ink: #0b2a2a;
+  --color-brand-950: #0b2828;
+  --color-brand-900: #103838;
+  --color-brand-800: #164e4b;
+  --color-brand-700: #1d625e;
+  --color-brand-100: #dcebe7;
+  --color-brand-50: #eef5f3;
+  --color-gold-700: #8a6d2a; /* gold text on light backgrounds (AA) */
+  --color-gold-500: #b08d3e; /* brand gold: fills, accents */
+  --color-gold-300: #d9bb73; /* gold text on dark backgrounds (AA) */
+  --color-gold-200: #ecdcb0;
+  --color-gold-100: #f6eedb;
+  --color-cream: #faf8f3;
+  --color-line: #e7e5df;
+  --color-muted: #5b6b6a;
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+
+  --radius-card: 1.25rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-gold-200);
+    color: var(--color-brand-950);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+}
+
+@utility grid-paper {
+  background-image:
+    linear-gradient(to right, rgb(16 56 56 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(16 56 56 / 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+@utility highlight {
+  /* pastel marker behind numbers, like the reference */
+  padding: 0.05em 0.3em;
+  border-radius: 0.45em;
+  box-decoration-break: clone;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
