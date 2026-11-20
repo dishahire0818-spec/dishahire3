@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { JobBoard } from "@/components/JobBoard";
-import { JobCardSkeleton } from "@/components/JobCard";
-import { PageHero } from "@/components/PageHero";
+import { JobRowSkeleton } from "@/components/JobRow";
 import { getOpenJobs } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -15,22 +15,25 @@ export const metadata: Metadata = {
 export default function JobsPage() {
   return (
     <>
-      <PageHero
-        eyebrow="Careers"
-        title={
-          <>
-            Find a role that moves you <span className="italic text-gold-700">forward</span>
-          </>
-        }
-        intro="Curated openings from our client companies. Apply online in two minutes. We never charge candidates."
-      />
-      <section className="container-page -mt-8 pb-24 sm:-mt-10">
+      <section className="relative overflow-hidden bg-brand-900 text-white">
+        <div className="container-page relative py-16 sm:py-20">
+          <nav aria-label="Breadcrumb" className="enter text-sm text-white/60">
+            <Link href="/" className="hover:text-white">Home</Link> <span className="mx-1.5">/</span> <span className="text-white">Jobs</span>
+          </nav>
+          <h1 className="enter mt-5 max-w-3xl text-5xl leading-[1.02] sm:text-7xl" style={{ animationDelay: "80ms" }}>
+            Find a role that moves you <span className="italic text-gold-300">forward</span>
+          </h1>
+          <p className="enter mt-5 max-w-xl text-white/70 sm:text-lg" style={{ animationDelay: "160ms" }}>
+            Curated openings from our client companies. Apply online in two minutes. We never charge candidates.
+          </p>
+        </div>
+      </section>
+      <section className="container-page py-12 sm:py-16">
         <Suspense
           fallback={
-            <div className="mt-24 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }, (_, i) => (
-                <JobCardSkeleton key={i} />
-              ))}
+            <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+              <div className="h-72 animate-pulse rounded-2xl bg-cream" />
+              <div className="grid content-start gap-3"><JobRowSkeleton /><JobRowSkeleton /><JobRowSkeleton /></div>
             </div>
           }
         >
@@ -42,6 +45,5 @@ export default function JobsPage() {
 }
 
 async function Jobs() {
-  const jobs = await getOpenJobs();
-  return <JobBoard jobs={jobs} />;
+  return <JobBoard jobs={await getOpenJobs()} />;
 }

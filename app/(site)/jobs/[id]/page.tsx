@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { ArrowLeft, Banknote, Briefcase, CalendarDays, GraduationCap, MapPin, UserRound } from "lucide-react";
+import { Banknote, Briefcase, CalendarDays, GraduationCap, MapPin, UserRound } from "lucide-react";
 import { ApplyForm } from "@/components/forms/ApplyForm";
 import { JsonLd } from "@/components/JsonLd";
 import { btn, cn, WhatsAppIcon } from "@/components/ui";
@@ -118,16 +118,26 @@ async function JobDetail({ params }: { params: PageProps<"/jobs/[id]">["params"]
   return (
     <>
       <JsonLd data={jobPostingLd(job)} />
-      <section className="border-b border-line bg-cream">
-        <div className="container-page py-12 sm:py-16">
-          <Link href="/jobs" className="inline-flex items-center gap-2 text-sm text-muted hover:text-brand-900">
-            <ArrowLeft size={16} /> All jobs
-          </Link>
-          <p className="mt-6 inline-block rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-800">{job.industry}</p>
-          <h1 className="mt-4 max-w-3xl text-5xl leading-[1.05] text-brand-900 sm:text-6xl">{job.title}</h1>
-          <p className="mt-4 flex items-center gap-2 text-muted">
-            <MapPin size={16} className="text-gold-700" /> {job.location}
-          </p>
+      <section className="relative overflow-hidden bg-brand-900 text-white">
+        <div className="container-page relative py-12 sm:py-16">
+          <nav aria-label="Breadcrumb" className="text-sm text-white/60">
+            <Link href="/" className="hover:text-white">Home</Link> <span className="mx-1.5">/</span>{" "}
+            <Link href="/jobs" className="hover:text-white">Jobs</Link> <span className="mx-1.5">/</span>{" "}
+            <span className="text-white">{job.title}</span>
+          </nav>
+          <p className="mt-8 inline-block rounded-full border border-white/15 px-3 py-1 text-xs text-gold-300">{job.industry}</p>
+          <h1 className="mt-4 max-w-3xl text-5xl leading-[1.02] sm:text-7xl">{job.title}</h1>
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-white/75">
+            <span className="inline-flex items-center gap-2"><MapPin size={16} className="text-gold-300" />{job.location}</span>
+            <span className="inline-flex items-center gap-2"><Banknote size={16} className="text-gold-300" />{job.salary}</span>
+            <span className="inline-flex items-center gap-2"><Briefcase size={16} className="text-gold-300" />{job.employmentType}</span>
+          </div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#apply" className={cn(btn.gold, btn.lg)}>Apply now</a>
+            <a href={`${CONTACT.whatsapp}?text=${whatsappText}`} target="_blank" rel="noopener noreferrer" className={cn(btn.outlineLight, btn.lg)}>
+              <WhatsAppIcon size={18} /> Apply on WhatsApp
+            </a>
+          </div>
         </div>
       </section>
 

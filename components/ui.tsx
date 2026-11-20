@@ -28,22 +28,65 @@ export function Eyebrow({ children, light }: { children: ReactNode; light?: bool
   );
 }
 
-/** Thin circular arc used beside headings (as in the reference design). */
-export function Arc({ className, light }: { className?: string; light?: boolean }) {
+/** Signature mark: a minimal compass ("Disha" = direction). */
+export function Compass({ className, light, spin }: { className?: string; light?: boolean; spin?: boolean }) {
+  const line = light ? "rgba(217,187,115,.55)" : "rgba(16,56,56,.22)";
   return (
     <svg viewBox="0 0 200 200" fill="none" aria-hidden className={cn("pointer-events-none", className)}>
-      <path
-        d="M170 40 A90 90 0 1 0 185 120"
-        stroke={light ? "rgba(217,187,115,.55)" : "rgba(16,56,56,.18)"}
-        strokeWidth="1.2"
-      />
-      <path
-        d="M150 35 A78 78 0 0 0 40 60"
-        stroke={light ? "rgba(217,187,115,.9)" : "#b08d3e"}
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
+      <g className={spin ? "origin-center animate-spin-slow" : undefined} style={{ transformBox: "fill-box" }}>
+        <circle cx="100" cy="100" r="96" stroke={line} strokeWidth="1" />
+        <circle cx="100" cy="100" r="78" stroke={line} strokeWidth="1" strokeDasharray="2 6" />
+        {Array.from({ length: 36 }, (_, i) => {
+          const a = (i * Math.PI) / 18;
+          const r1 = i % 9 === 0 ? 84 : 89;
+          return (
+            <line
+              key={i}
+              x1={100 + Math.cos(a) * r1}
+              y1={100 + Math.sin(a) * r1}
+              x2={100 + Math.cos(a) * 94}
+              y2={100 + Math.sin(a) * 94}
+              stroke={line}
+              strokeWidth="1"
+            />
+          );
+        })}
+      </g>
+      <path d="M100 30 L112 100 L100 170 L88 100 Z" fill={light ? "rgba(255,255,255,.08)" : "rgba(16,56,56,.06)"} stroke={line} />
+      <path d="M100 30 L112 100 L88 100 Z" fill="#b08d3e" />
+      <circle cx="100" cy="100" r="5" fill={light ? "#d9bb73" : "#103838"} />
     </svg>
+  );
+}
+
+/** Section heading with an index number, used across pages for a consistent rhythm. */
+export function SectionHeading({
+  index,
+  eyebrow,
+  title,
+  intro,
+  light,
+  align = "left",
+  className,
+}: {
+  index?: string;
+  eyebrow: string;
+  title: ReactNode;
+  intro?: ReactNode;
+  light?: boolean;
+  align?: "left" | "center";
+  className?: string;
+}) {
+  return (
+    <div className={cn("reveal", align === "center" && "mx-auto max-w-2xl text-center", className)}>
+      <p className={cn("flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em]", align === "center" && "justify-center", light ? "text-gold-300" : "text-gold-700")}>
+        {index && <span className={cn("font-display text-base normal-case tracking-normal", light ? "text-white/50" : "text-brand-900/40")}>{index}</span>}
+        {index && <span className={cn("h-px w-8", light ? "bg-white/25" : "bg-brand-900/20")} />}
+        {eyebrow}
+      </p>
+      <h2 className={cn("mt-4 text-4xl leading-[1.05] sm:text-5xl lg:text-[3.5rem]", light ? "text-white" : "text-brand-900")}>{title}</h2>
+      {intro && <p className={cn("mt-5 max-w-xl text-base leading-relaxed sm:text-lg", align === "center" && "mx-auto", light ? "text-white/70" : "text-muted")}>{intro}</p>}
+    </div>
   );
 }
 

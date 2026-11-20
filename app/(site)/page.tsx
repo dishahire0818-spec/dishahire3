@@ -1,293 +1,245 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import {
-  ArrowRight,
-  BadgeCheck,
-  Building2,
-  Factory,
-  GraduationCap,
-  HeartHandshake,
-  Landmark,
-  Laptop,
-  Megaphone,
-  Plane,
-  Radio,
-  Rocket,
-  Search,
-  ShieldCheck,
-  ShoppingBag,
-  Stethoscope,
-  Timer,
-  TrendingUp,
-  Truck,
-  UserCheck,
-  Zap,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ClipboardList, Search, UserPlus, Users } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
-import { HowItWorks } from "@/components/home/HowItWorks";
-import { ServicesShowcase } from "@/components/home/ServicesShowcase";
-import { JobCard, JobCardSkeleton } from "@/components/JobCard";
-import { Arc, btn, cn, Eyebrow } from "@/components/ui";
+import { HeroVisual } from "@/components/home/HeroVisual";
+import { Process } from "@/components/home/Process";
+import { JobRow, JobRowSkeleton } from "@/components/JobRow";
+import { IndustryMarquee } from "@/components/Marquee";
+import { btn, cn, SectionHeading } from "@/components/ui";
 import { getOpenJobs } from "@/lib/data";
-import { INDUSTRIES, PHOTOS } from "@/lib/site";
-
-const INDUSTRY_ICONS: LucideIcon[] = [
-  Laptop, Stethoscope, Landmark, Factory, TrendingUp, UserCheck, ShoppingBag, Plane,
-  GraduationCap, Building2, Radio, Megaphone, Truck, Zap, Rocket,
-];
-
-const POPULAR = ["Sales", "Accounts", "Engineer", "HR", "IT", "Marketing"];
+import { PHOTOS, SERVICES } from "@/lib/site";
 
 const STATS = [
-  { value: "15", label: "Industries served", body: "From IT and BFSI to manufacturing, logistics and startups.", tone: "bg-gold-200" },
-  { value: "3–5 days", label: "To your first shortlist", body: "Screened, relevant profiles, not a pile of resumes.", tone: "bg-brand-100" },
-  { value: "₹0", label: "Fees for job seekers", body: "We never charge candidates for placements or interviews.", tone: "bg-brand-100" },
-  { value: "24 hrs", label: "Response to enquiries", body: "Every request gets a reply from a consultant within a day.", tone: "bg-gold-200" },
+  { value: "15", label: "industries served" },
+  { value: "3–5", unit: "days", label: "to your first shortlist" },
+  { value: "₹0", label: "fees for job seekers" },
+  { value: "24", unit: "hrs", label: "reply to every enquiry" },
 ];
 
 const WHY = [
-  { icon: ShieldCheck, title: "Ethical & transparent", body: "Clear communication with clients and candidates at every step, with no hidden fees for job seekers." },
-  { icon: BadgeCheck, title: "Screened shortlists", body: "Resume screening, assessment and interview coordination before a profile ever reaches you." },
-  { icon: Timer, title: "Fast turnaround", body: "First shortlist in 3–5 business days, plus bulk-hiring capacity when you need to scale." },
-  { icon: HeartHandshake, title: "Long-term fit", body: "We hire for alignment, not just to fill a seat, so people stay and grow with you." },
+  { title: "Ethical & transparent", body: "Clear communication at every step, and no fees for candidates. Ever." },
+  { title: "Screened, not forwarded", body: "Every profile is screened and assessed before it reaches your inbox." },
+  { title: "Fast, local, responsive", body: "First shortlist in 3–5 business days, from a team that picks up the phone." },
+  { title: "Built for long-term fit", body: "We hire for alignment, not just to fill a seat, so people stay and grow." },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* HERO */}
-      <section className="container-page pt-14 pb-10 text-center sm:pt-20">
-        <h1 className="mx-auto max-w-4xl text-5xl leading-[1.02] text-brand-900 sm:text-7xl lg:text-[5.5rem]">
-          Right talent, <span className="italic text-gold-700">right direction.</span>
-        </h1>
-        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          DishaHire connects ambitious professionals with forward-thinking employers across 15 industries, with
-          ethical, transparent and fast hiring from Rajkot, Gujarat.
-        </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/contact?type=employer" className={cn(btn.gold, btn.lg, "w-full sm:w-auto")}>
-            Hire talent <ArrowRight size={18} />
-          </Link>
-          <Link href="/jobs" className={cn(btn.outline, btn.lg, "w-full sm:w-auto")}>
-            Browse open jobs
-          </Link>
-        </div>
-      </section>
-
-      {/* IMAGE STRIP + SEARCH */}
-      <section aria-label="Find a job" className="relative">
-        <div className="mx-auto grid max-w-[90rem] grid-cols-1 gap-4 px-4 sm:px-6 lg:grid-cols-[1fr_2.4fr_1fr]">
-          <div className="relative hidden h-[28rem] overflow-hidden rounded-[1.75rem] bg-brand-100 lg:block">
-            <Image src={PHOTOS.team} alt="" fill sizes="20vw" className="object-cover" />
-            <div className="absolute right-4 bottom-6 left-4 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur">
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-700">Shortlist ready</p>
-              <p className="mt-1 font-display text-2xl text-brand-900">3–5 days</p>
-              <p className="text-xs text-muted">from requirement to first profiles</p>
-            </div>
-          </div>
-
-          <div className="relative h-[24rem] overflow-hidden rounded-[1.75rem] bg-brand-800 sm:h-[28rem]">
-            <Image
-              src={PHOTOS.meeting}
-              alt="Recruiters and candidates in a meeting"
-              fill
-              priority
-              sizes="(min-width: 1024px) 55vw, 100vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-950/50 to-transparent" />
-            <form
-              action="/jobs"
-              method="get"
-              className="absolute top-1/2 left-1/2 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-5 text-left shadow-2xl sm:p-7"
-            >
-              <label htmlFor="hero-q" className="font-display text-3xl text-brand-900">
-                Find your next role
-              </label>
-              <div className="mt-4 flex items-center gap-2 rounded-full border border-line bg-cream py-1.5 pr-1.5 pl-4 focus-within:border-brand-900">
-                <Search size={18} className="shrink-0 text-muted" aria-hidden />
-                <input
-                  id="hero-q"
-                  name="q"
-                  placeholder="Job title, skill or city"
-                  className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-brand-900 outline-none placeholder:text-muted"
-                />
-                <button type="submit" className={cn(btn.dark, "px-4")} aria-label="Search jobs">
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-              <p className="mt-5 font-display text-xl text-brand-900">Popular searches</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {POPULAR.map((p) => (
-                  <Link
-                    key={p}
-                    href={`/jobs?q=${encodeURIComponent(p)}`}
-                    className="rounded-full border border-line px-3 py-1 text-xs text-brand-900 hover:border-brand-900"
-                  >
-                    {p}
-                  </Link>
-                ))}
-              </div>
-            </form>
-          </div>
-
-          <div className="relative hidden h-[28rem] overflow-hidden rounded-[1.75rem] bg-brand-100 lg:block">
-            <Image src={PHOTOS.interview} alt="" fill sizes="20vw" className="object-cover" />
-            <div className="absolute top-6 right-4 left-4 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur">
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold-700">Our process</p>
-              <ul className="mt-2 space-y-1.5 text-sm text-brand-900">
-                {["Screening", "Assessment", "Interviews", "Onboarding"].map((s) => (
-                  <li key={s} className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-gold-500" /> {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AT A GLANCE */}
-      <section className="container-page py-20 sm:py-28">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-          <div className="relative">
-            <Arc className="absolute -top-10 -left-10 h-44 w-44 sm:-left-14" />
-            <h2 className="relative pt-6 pl-8 text-4xl leading-tight text-brand-900 sm:text-5xl">
-              DishaHire
-              <br />
-              at a glance
-            </h2>
-          </div>
+      {/* ───────── HERO ───────── */}
+      <section className="relative overflow-hidden">
+        <div className="container-page relative grid items-center gap-14 pt-12 pb-16 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:pt-20 lg:pb-24">
           <div>
-            <p className="max-w-xl text-muted">
-              We are a professional recruitment consultancy committed to ethical, transparent and result-oriented
-              hiring, focused on long-term alignment rather than short-term placements.
+            <Link
+              href="/jobs"
+              className="enter inline-flex items-center gap-2.5 rounded-full border border-line bg-white py-1.5 pr-4 pl-2 text-sm text-brand-900 shadow-sm hover:border-brand-900"
+            >
+              <span className="h-2 w-2 rounded-full bg-gold-500 animate-pulse-dot" />
+              Now hiring across Gujarat
+              <ArrowRight size={14} className="text-muted" />
+            </Link>
+            <h1 className="enter mt-7 text-[3.4rem] leading-[0.95] tracking-tight text-brand-900 sm:text-7xl lg:text-[6.2rem]" style={{ animationDelay: "80ms" }}>
+              Right talent,
+              <br />
+              <span className="italic text-gold-700">right direction.</span>
+            </h1>
+            <p className="enter mt-7 max-w-lg text-lg leading-relaxed text-muted" style={{ animationDelay: "160ms" }}>
+              DishaHire is a Rajkot-based recruitment consultancy that finds the people your business needs, and helps job
+              seekers find work worth staying for.
             </p>
-            <dl className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2">
-              {STATS.map((s) => (
-                <div key={s.label} className="border-t border-line pt-5">
-                  <dt className="sr-only">{s.label}</dt>
+            <div className="enter mt-9 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "240ms" }}>
+              <Link href="/contact?type=employer" className={cn(btn.dark, btn.lg)}>
+                Hire talent <ArrowRight size={18} />
+              </Link>
+              <Link href="/jobs" className={cn(btn.outline, btn.lg)}>
+                <Search size={17} /> Find a job
+              </Link>
+            </div>
+            <dl className="enter mt-12 grid max-w-lg grid-cols-3 divide-x divide-line border-t border-line pt-6" style={{ animationDelay: "320ms" }}>
+              {[
+                ["15", "industries"],
+                ["3–5 days", "to shortlist"],
+                ["₹0", "for candidates"],
+              ].map(([v, l]) => (
+                <div key={l} className="px-4 first:pl-0">
+                  <dt className="sr-only">{l}</dt>
                   <dd>
-                    <span className={cn("highlight font-display text-4xl text-brand-900 sm:text-5xl", s.tone)}>{s.value}</span>
-                    <p className="mt-4 font-medium text-brand-900">{s.label}</p>
-                    <p className="mt-1 text-sm text-muted">{s.body}</p>
+                    <span className="block font-display text-3xl text-brand-900">{v}</span>
+                    <span className="text-sm text-muted">{l}</span>
                   </dd>
                 </div>
               ))}
             </dl>
           </div>
+          <HeroVisual />
         </div>
+        <IndustryMarquee />
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="bg-brand-900 py-20 text-white sm:py-28">
-        <div className="container-page">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <h2 className="text-4xl leading-tight sm:text-5xl">
-              How hiring becomes <span className="italic text-gold-300">effortless</span>
-            </h2>
-            <p className="mt-4 text-white/70">
-              From the first conversation to the first day at work, with a simple, guided process on both sides.
-            </p>
-          </div>
-          <HowItWorks />
-        </div>
-      </section>
-
-      {/* SERVICES */}
+      {/* ───────── TWO PATHS ───────── */}
       <section className="container-page py-20 sm:py-28">
-        <div className="mb-10 grid gap-4 lg:grid-cols-2 lg:items-end">
-          <h2 className="text-4xl leading-tight text-brand-900 sm:text-5xl">
-            Everything you need
-            <br />
-            to hire smarter
-          </h2>
-          <p className="max-w-lg text-muted lg:justify-self-end">
-            Recruitment, sourcing and HR consultancy under one roof, so you can scale your team without scaling your
-            workload.
-          </p>
-        </div>
-        <ServicesShowcase />
-      </section>
-
-      {/* INDUSTRIES */}
-      <section className="bg-cream py-20 sm:py-24">
-        <div className="container-page">
-          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <Eyebrow>Our expertise</Eyebrow>
-              <h2 className="mt-3 text-4xl text-brand-900 sm:text-5xl">Industries we serve</h2>
-            </div>
-            <Link href="/jobs" className="inline-flex items-center gap-2 text-sm font-medium text-gold-700 hover:text-brand-900">
-              See open roles <ArrowRight size={16} />
-            </Link>
-          </div>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {INDUSTRIES.map((name, i) => {
-              const Icon = INDUSTRY_ICONS[i] ?? Building2;
-              return (
-                <li key={name} className="flex items-center gap-4 rounded-2xl border border-line bg-white px-5 py-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-900 text-gold-300">
-                    <Icon size={18} />
-                  </span>
-                  <span className="text-sm font-medium text-brand-900">{name}</span>
+        <SectionHeading index="01" eyebrow="Two ways we help" title={<>One consultancy, <span className="italic">both sides</span> of the table</>} />
+        <div className="mt-12 grid gap-5 lg:grid-cols-2">
+          <article className="reveal relative flex flex-col overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white sm:p-12">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-300">For employers</p>
+            <h3 className="mt-4 text-4xl leading-tight sm:text-5xl">Build your team without the hiring headache</h3>
+            <ul className="mt-8 space-y-3 text-white/85">
+              {["Screened shortlist in 3–5 business days", "Permanent, contract and bulk hiring", "Interview coordination and offer support", "HR policy and onboarding guidance"].map((t) => (
+                <li key={t} className="flex gap-3">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold-500 text-brand-950"><Check size={12} strokeWidth={3} /></span>
+                  {t}
                 </li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-
-      {/* LATEST JOBS */}
-      <section className="container-page py-20 sm:py-28">
-        <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <Eyebrow>Now hiring</Eyebrow>
-            <h2 className="mt-3 text-4xl text-brand-900 sm:text-5xl">Latest openings</h2>
-          </div>
-          <Link href="/jobs" className={btn.outline}>
-            View all jobs <ArrowRight size={16} />
-          </Link>
-        </div>
-        <Suspense
-          fallback={
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              <JobCardSkeleton />
-              <JobCardSkeleton />
-              <JobCardSkeleton />
+              ))}
+            </ul>
+            <div className="mt-auto flex flex-wrap items-center gap-5 pt-10">
+              <Link href="/contact?type=employer" className={cn(btn.gold, btn.lg)}>Share a requirement</Link>
+              <Link href="/services" className="inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white">Our services <ArrowUpRight size={15} /></Link>
             </div>
-          }
-        >
-          <LatestJobs />
-        </Suspense>
+          </article>
+          <article className="reveal relative flex flex-col overflow-hidden rounded-[2rem] bg-gold-100 p-8 sm:p-12">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-700">For job seekers</p>
+            <h3 className="mt-4 text-4xl leading-tight text-brand-900 sm:text-5xl">Get matched with roles that fit your goals</h3>
+            <ul className="mt-8 space-y-3 text-brand-900">
+              {["100% free, we never charge candidates", "Openings across 15 industries", "Interview preparation and scheduling", "Apply online in two minutes"].map((t) => (
+                <li key={t} className="flex gap-3">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-900 text-white"><Check size={12} strokeWidth={3} /></span>
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-auto flex flex-wrap items-center gap-5 pt-10">
+              <Link href="/jobs" className={cn(btn.dark, btn.lg)}>Browse open jobs</Link>
+              <Link href="/contact?type=candidate" className="inline-flex items-center gap-1.5 text-sm text-brand-900 hover:text-gold-700">Submit your resume <ArrowUpRight size={15} /></Link>
+            </div>
+          </article>
+        </div>
       </section>
 
-      {/* WHY US */}
-      <section className="bg-brand-900 py-20 text-white sm:py-28">
+      {/* ───────── STATS BAND ───────── */}
+      <section className="border-y border-line bg-cream">
+        <dl className="container-page grid grid-cols-2 lg:grid-cols-4">
+          {STATS.map((s, i) => (
+            <div key={s.label} className={cn("reveal px-2 py-10 sm:px-8 sm:py-14", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line lg:border-t-0", i === 2 && "lg:border-l")}>
+              <dt className="sr-only">{s.label}</dt>
+              <dd>
+                <span className="font-display text-6xl leading-none text-brand-900 sm:text-7xl">{s.value}</span>
+                {s.unit && <span className="ml-1.5 font-display text-2xl text-gold-700 italic">{s.unit}</span>}
+                <span className="mt-3 block text-sm text-muted">{s.label}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {/* ───────── PROCESS ───────── */}
+      <section className="container-page py-20 sm:py-28">
+        <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+          <SectionHeading index="02" eyebrow="How it works" title={<>A clear path from <span className="italic">hello</span> to hired</>} />
+        </div>
+        <div className="mt-10">
+          <Process />
+        </div>
+      </section>
+
+      {/* ───────── SERVICES BENTO ───────── */}
+      <section className="bg-cream py-20 sm:py-28">
         <div className="container-page">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-4xl leading-tight sm:text-5xl">
-              Why companies
-              <br />
-              choose <span className="italic text-gold-300">DishaHire</span>
-            </h2>
-            <p className="mt-4 text-white/70">Smarter hiring, better fits, and a partner who picks up the phone.</p>
-            <Link href="/contact?type=employer" className={cn(btn.gold, "mt-7")}>
-              Start hiring today
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <SectionHeading index="03" eyebrow="Services" title={<>Everything you need<br />to hire <span className="italic">smarter</span></>} />
+            <Link href="/services" className={cn(btn.outline, "reveal self-start bg-white lg:self-auto")}>All services <ArrowRight size={16} /></Link>
+          </div>
+          <div className="mt-12 grid gap-4 lg:grid-cols-6 lg:grid-rows-[auto_auto]">
+            {/* Recruitment: large dark tile */}
+            <Link href="/services#recruitment" className="reveal group relative overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white lg:col-span-4 lg:row-span-1 sm:p-10">
+              <div className="flex items-start justify-between gap-6">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gold-500 text-brand-950"><Users size={20} /></span>
+                <ArrowUpRight className="text-white/50 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-gold-300" />
+              </div>
+              <h3 className="mt-8 text-4xl">{SERVICES[0].title}</h3>
+              <p className="mt-3 max-w-md text-white/70">{SERVICES[0].summary}</p>
+              <ul className="mt-8 flex flex-wrap gap-2">
+                {SERVICES[0].items.map((i) => (
+                  <li key={i.name} className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/85">{i.name}</li>
+                ))}
+              </ul>
+            </Link>
+            {/* Photo tile */}
+            <div className="reveal relative min-h-64 overflow-hidden rounded-[2rem] bg-brand-800 lg:col-span-2">
+              <Image src={PHOTOS.interview} alt="Candidate interview in progress" fill sizes="(min-width:1024px) 30vw, 100vw" className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 to-transparent" />
+              <p className="absolute right-6 bottom-6 left-6 font-display text-2xl leading-tight text-white">Bulk hiring, organised end to end</p>
+            </div>
+            {/* Sourcing */}
+            <Link href="/services#sourcing" className="reveal group relative overflow-hidden rounded-[2rem] border border-line bg-white p-8 lg:col-span-3 sm:p-10">
+              <div className="flex items-start justify-between">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-900 text-gold-300"><UserPlus size={20} /></span>
+                <ArrowUpRight className="text-muted transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-brand-900" />
+              </div>
+              <h3 className="mt-8 text-3xl text-brand-900 sm:text-4xl">{SERVICES[1].title}</h3>
+              <p className="mt-3 text-muted">{SERVICES[1].summary}</p>
+              <ul className="mt-6 space-y-2">
+                {SERVICES[1].items.map((i) => (
+                  <li key={i.name} className="flex items-center gap-2.5 text-sm text-brand-900"><Check size={15} className="text-gold-700" />{i.name}</li>
+                ))}
+              </ul>
+            </Link>
+            {/* HR */}
+            <Link href="/services#hr" className="reveal group relative overflow-hidden rounded-[2rem] bg-gold-100 p-8 lg:col-span-3 sm:p-10">
+              <div className="flex items-start justify-between">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-900 text-gold-300"><ClipboardList size={20} /></span>
+                <ArrowUpRight className="text-muted transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-brand-900" />
+              </div>
+              <h3 className="mt-8 text-3xl text-brand-900 sm:text-4xl">{SERVICES[2].title}</h3>
+              <p className="mt-3 text-brand-900/70">{SERVICES[2].summary}</p>
+              <ul className="mt-6 space-y-2">
+                {SERVICES[2].items.map((i) => (
+                  <li key={i.name} className="flex items-center gap-2.5 text-sm text-brand-900"><Check size={15} className="text-gold-700" />{i.name}</li>
+                ))}
+              </ul>
             </Link>
           </div>
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {WHY.map(({ icon: Icon, title, body }) => (
-              <div key={title} className="rounded-2xl border border-white/12 bg-white/[0.03] p-6 text-center">
-                <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-gold-500 text-brand-950">
-                  <Icon size={20} />
-                </span>
-                <h3 className="mt-5 text-2xl">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/70">{body}</p>
-              </div>
-            ))}
+        </div>
+      </section>
+
+      {/* ───────── LATEST JOBS ───────── */}
+      <section className="container-page py-20 sm:py-28">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <SectionHeading index="04" eyebrow="Now hiring" title={<>Latest <span className="italic">openings</span></>} />
+          <Link href="/jobs" className={cn(btn.outline, "reveal self-start sm:self-auto")}>View all jobs <ArrowRight size={16} /></Link>
+        </div>
+        <div className="mt-10">
+          <Suspense fallback={<div className="grid gap-3"><JobRowSkeleton /><JobRowSkeleton /><JobRowSkeleton /></div>}>
+            <LatestJobs />
+          </Suspense>
+        </div>
+      </section>
+
+      {/* ───────── WHY US ───────── */}
+      <section className="border-t border-line py-20 sm:py-28">
+        <div className="container-page grid items-center gap-14 lg:grid-cols-2">
+          <div className="reveal relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-brand-800 lg:aspect-auto lg:h-full lg:min-h-[34rem]">
+            <Image src={PHOTOS.office} alt="The DishaHire team at work" fill sizes="(min-width:1024px) 45vw, 100vw" className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/10 to-transparent" />
+            <div className="absolute right-6 bottom-6 left-6 rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
+              <p className="font-display text-3xl">દિશા <span className="text-white/50">·</span> <span className="italic text-gold-300">Disha</span></p>
+              <p className="mt-1 text-sm text-white/75">means &ldquo;direction&rdquo;. It&apos;s what we try to give every client and every candidate.</p>
+            </div>
+          </div>
+          <div>
+            <SectionHeading index="05" eyebrow="Why DishaHire" title={<>Why companies <span className="italic">choose us</span></>} intro="Smarter hiring, better fits, and a partner who actually picks up the phone." />
+            <ol className="mt-10 divide-y divide-line border-y border-line">
+              {WHY.map((w, i) => (
+                <li key={w.title} className="reveal grid grid-cols-[3rem_1fr] gap-4 py-6">
+                  <span className="font-display text-2xl text-gold-700">0{i + 1}</span>
+                  <div>
+                    <h3 className="text-2xl text-brand-900">{w.title}</h3>
+                    <p className="mt-1.5 text-muted">{w.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
@@ -298,22 +250,22 @@ export default function HomePage() {
 }
 
 async function LatestJobs() {
-  const jobs = (await getOpenJobs()).slice(0, 3);
+  const jobs = (await getOpenJobs()).slice(0, 4);
   if (jobs.length === 0) {
     return (
-      <div className="rounded-[var(--radius-card)] border border-dashed border-line p-10 text-center">
-        <p className="font-display text-2xl text-brand-900">New openings are posted every week</p>
-        <p className="mt-2 text-sm text-muted">Share your profile and we&apos;ll reach out when a matching role opens.</p>
-        <Link href="/contact?type=candidate" className={cn(btn.dark, "mt-5")}>
-          Submit your resume
-        </Link>
+      <div className="reveal grid gap-6 rounded-[2rem] border border-dashed border-brand-900/20 bg-cream p-8 sm:grid-cols-[1fr_auto] sm:items-center sm:p-10">
+        <div>
+          <p className="font-display text-3xl text-brand-900">New roles are added every week</p>
+          <p className="mt-2 text-muted">Share your profile once, and we&apos;ll reach out as soon as a matching role opens.</p>
+        </div>
+        <Link href="/contact?type=candidate" className={cn(btn.dark, btn.lg)}>Submit your resume</Link>
       </div>
     );
   }
   return (
-    <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-3">
       {jobs.map((j) => (
-        <JobCard key={j.id} job={j} showPosted={false} />
+        <JobRow key={j.id} job={j} />
       ))}
     </div>
   );

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Eye, Gem, Handshake, ShieldCheck, Target, TrendingUp, Users } from "lucide-react";
+import Link from "next/link";
+import { Eye, Target } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
-import { PageHero } from "@/components/PageHero";
-import { cn, Eyebrow } from "@/components/ui";
-import { PHOTOS, VALUES } from "@/lib/site";
+import { IndustryMarquee } from "@/components/Marquee";
+import { Compass, SectionHeading } from "@/components/ui";
+import { INDUSTRIES, PHOTOS, VALUES } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -13,102 +14,132 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const VALUE_ICONS = [ShieldCheck, Target, Gem, Users, TrendingUp];
-
 export default function AboutPage() {
   return (
     <>
-      <PageHero
-        eyebrow="About DishaHire"
-        title={
-          <>
-            Your trusted <span className="italic text-gold-700">hiring partner</span>
-          </>
-        }
-        intro="Bridging the gap between ambitious job seekers and forward-thinking employers through end-to-end recruitment."
-      />
-
-      <section className="container-page grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-2">
-        <div>
-          <Eyebrow>Who we are</Eyebrow>
-          <h2 className="mt-3 text-4xl leading-tight text-brand-900 sm:text-5xl">
-            Hiring built on <span className="italic">trust</span>
-          </h2>
-          <div className="mt-6 space-y-4 leading-relaxed text-muted">
-            <p>
-              Disha Hire is a professional recruitment consultancy committed to{" "}
-              <strong className="font-medium text-brand-900">ethical, transparent and result-oriented hiring</strong>.
+      {/* HERO: split statement + photo mosaic */}
+      <section className="relative overflow-hidden">
+        <div className="container-page grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.05fr_1fr]">
+          <div>
+            <nav aria-label="Breadcrumb" className="enter text-sm text-muted">
+              <Link href="/" className="hover:text-brand-900">Home</Link> <span className="mx-1.5">/</span> <span className="text-brand-900">About</span>
+            </nav>
+            <h1 className="enter mt-6 text-5xl leading-[0.98] text-brand-900 sm:text-7xl" style={{ animationDelay: "80ms" }}>
+              We give hiring a <span className="italic text-gold-700">direction.</span>
+            </h1>
+            <p className="enter mt-6 max-w-lg text-lg leading-relaxed text-muted" style={{ animationDelay: "160ms" }}>
+              DishaHire is a professional recruitment consultancy from Rajkot, Gujarat, bridging the gap between ambitious
+              job seekers and forward-thinking employers through end-to-end recruitment.
             </p>
-            <p>
-              We focus on long-term alignment instead of short-term placements, so every hire contributes to the growth
-              of both the individual and the organisation. &ldquo;Disha&rdquo; means direction, and that is what we aim
-              to give every client and candidate.
-            </p>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {[
-              { icon: Handshake, label: "Transparency" },
-              { icon: Users, label: "Client first" },
-              { icon: ShieldCheck, label: "No fees for candidates" },
-            ].map(({ icon: Icon, label }) => (
-              <span key={label} className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm text-brand-900">
-                <Icon size={16} className="text-gold-700" /> {label}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="relative aspect-[5/4] overflow-hidden rounded-[1.75rem] bg-brand-100">
-          <Image src={PHOTOS.office} alt="DishaHire consultants at work" fill sizes="(min-width:1024px) 45vw, 100vw" className="object-cover" />
-        </div>
-      </section>
-
-      <section className="bg-brand-900 py-20 text-white sm:py-28">
-        <div className="container-page grid gap-5 md:grid-cols-2">
-          {[
-            {
-              icon: Target,
-              title: "Our mission",
-              body: "To empower careers and strengthen organisations by delivering high-quality, customised recruitment services that prioritise trust, efficiency and long-term success.",
-            },
-            {
-              icon: Eye,
-              title: "Our vision",
-              body: "To become a leading job consulting firm recognised for integrity, professionalism and excellence across industries, setting a new benchmark in HR consultancy.",
-            },
-          ].map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-[1.75rem] border border-white/12 bg-white/[0.03] p-8 sm:p-12">
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-gold-500 text-brand-950">
-                <Icon size={22} />
-              </span>
-              <h2 className="mt-6 text-4xl">{title}</h2>
-              <p className="mt-4 leading-relaxed text-white/75">{body}</p>
+            <div className="enter mt-10 inline-flex items-center gap-5 rounded-2xl border border-line p-4 pr-6" style={{ animationDelay: "240ms" }}>
+              <Compass className="h-16 w-16 shrink-0" />
+              <p className="text-sm text-muted">
+                <span className="font-display text-2xl text-brand-900">દિશા · Disha</span>
+                <br />
+                Gujarati for <em>direction</em>. It&apos;s the promise in our name.
+              </p>
             </div>
-          ))}
+          </div>
+          <div className="relative grid h-[30rem] grid-cols-2 grid-rows-2 gap-4 sm:h-[34rem]">
+            <div className="enter relative row-span-2 overflow-hidden rounded-[2rem] bg-brand-800" style={{ animationDelay: "120ms" }}>
+              <Image src={PHOTOS.office} alt="Consultants in a meeting" fill priority sizes="(min-width:1024px) 22vw, 50vw" className="object-cover" />
+            </div>
+            <div className="enter relative overflow-hidden rounded-[2rem] bg-brand-100" style={{ animationDelay: "220ms" }}>
+              <Image src={PHOTOS.meeting} alt="Recruiter reviewing profiles" fill sizes="(min-width:1024px) 22vw, 50vw" className="object-cover" />
+            </div>
+            <div className="enter flex flex-col justify-end overflow-hidden rounded-[2rem] bg-brand-900 p-6 text-white" style={{ animationDelay: "320ms" }}>
+              <p className="font-display text-5xl text-gold-300">15</p>
+              <p className="mt-1 text-sm text-white/75">industries served across Gujarat and beyond</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="container-page py-20 sm:py-28">
-        <div className="mx-auto max-w-2xl text-center">
-          <Eyebrow>Foundation</Eyebrow>
-          <h2 className="mt-3 text-4xl text-brand-900 sm:text-5xl">Our values</h2>
+      {/* STORY */}
+      <section className="border-t border-line bg-cream py-20 sm:py-28">
+        <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.2fr]">
+          <SectionHeading index="01" eyebrow="Who we are" title={<>Hiring built on <span className="italic">trust</span></>} />
+          <div className="reveal space-y-5 text-lg leading-relaxed text-brand-900/80">
+            <p>
+              Disha Hire is committed to <strong className="font-medium text-brand-900">ethical, transparent and result-oriented hiring</strong>.
+              We work with startups, MSMEs and established companies to find people who fit, not just people who are available.
+            </p>
+            <p>
+              We focus on long-term alignment instead of short-term placements, so every hire contributes to the growth of
+              both the individual and the organisation. And for job seekers, our services are always free.
+            </p>
+            <div className="grid gap-4 pt-4 sm:grid-cols-3">
+              {[
+                ["Transparency", "Honest updates at every step"],
+                ["Client first", "Your brief, your timeline"],
+                ["Free for seekers", "We never charge candidates"],
+              ].map(([t, d]) => (
+                <div key={t} className="border-t-2 border-gold-500 pt-3">
+                  <p className="font-display text-xl text-brand-900">{t}</p>
+                  <p className="text-sm text-muted">{d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {VALUES.map((v, i) => {
-            const Icon = VALUE_ICONS[i];
-            return (
-              <li key={v.title} className={cn("rounded-2xl p-6", i % 2 ? "bg-brand-50" : "bg-gold-100")}>
-                <Icon size={22} className="text-brand-900" />
-                <h3 className="mt-5 text-2xl text-brand-900">{v.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{v.desc}</p>
+      </section>
+
+      {/* MISSION / VISION */}
+      <section className="container-page grid gap-5 py-20 sm:py-28 md:grid-cols-2">
+        <article className="reveal relative overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white sm:p-12">
+          <Target className="text-gold-300" size={28} />
+          <h2 className="mt-8 text-4xl sm:text-5xl">Our mission</h2>
+          <p className="mt-5 text-lg leading-relaxed text-white/75">
+            To empower careers and strengthen organisations by delivering high-quality, customised recruitment services that
+            prioritise trust, efficiency and long-term success.
+          </p>
+        </article>
+        <article className="reveal relative overflow-hidden rounded-[2rem] bg-gold-100 p-8 sm:p-12">
+          <Eye className="text-gold-700" size={28} />
+          <h2 className="mt-8 text-4xl text-brand-900 sm:text-5xl">Our vision</h2>
+          <p className="mt-5 text-lg leading-relaxed text-brand-900/75">
+            To become a leading job consulting firm recognised for integrity, professionalism and excellence across industries,
+            setting a new benchmark in HR consultancy.
+          </p>
+        </article>
+      </section>
+
+      {/* VALUES: numbered editorial list */}
+      <section className="border-y border-line py-20 sm:py-28">
+        <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.4fr]">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <SectionHeading index="02" eyebrow="Foundation" title={<>The values we <span className="italic">hire by</span></>} intro="Five principles that guide every brief we take and every candidate we put forward." />
+          </div>
+          <ol className="divide-y divide-line border-y border-line">
+            {VALUES.map((v, i) => (
+              <li key={v.title} className="reveal group grid grid-cols-[4rem_1fr] items-baseline gap-4 py-7 sm:grid-cols-[5rem_1fr_1.2fr]">
+                <span className="font-display text-4xl text-gold-500 transition-colors group-hover:text-gold-700">0{i + 1}</span>
+                <h3 className="text-3xl text-brand-900">{v.title}</h3>
+                <p className="col-start-2 text-muted sm:col-start-3">{v.desc}</p>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ol>
+        </div>
       </section>
 
-      <div className="border-t border-line">
-        <CtaSection />
-      </div>
+      {/* INDUSTRIES */}
+      <section className="py-20 sm:py-28">
+        <div className="container-page">
+          <SectionHeading index="03" eyebrow="Expertise" title={<>Industries we <span className="italic">serve</span></>} />
+          <ul className="mt-10 flex flex-wrap gap-2.5">
+            {INDUSTRIES.map((i) => (
+              <li key={i} className="reveal rounded-full border border-line px-5 py-2.5 text-brand-900 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white">
+                {i}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="mt-16">
+          <IndustryMarquee />
+        </div>
+      </section>
+
+      <CtaSection title={<>Let&apos;s find your <span className="italic text-gold-300">next great hire</span></>} />
     </>
   );
 }

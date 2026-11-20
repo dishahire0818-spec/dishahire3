@@ -77,3 +77,71 @@
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------- Motion ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(176 141 62 / 0.55); }
+  60% { box-shadow: 0 0 0 7px rgb(176 141 62 / 0); }
+}
+
+@utility animate-marquee {
+  animation: marquee 45s linear infinite;
+}
+@utility animate-spin-slow {
+  animation: spin-slow 40s linear infinite;
+}
+@utility animate-pulse-dot {
+  animation: pulse-dot 2.2s ease-out infinite;
+}
+/* Page-load entrance; use style={{ animationDelay }} to stagger. */
+@utility enter {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Scroll reveal with pure CSS (progressive: browsers without support just show content). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* ---------- Texture ---------- */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+@utility dot-grid {
+  background-image: radial-gradient(rgb(16 56 56 / 0.13) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+@utility glow-gold {
+  background-image: radial-gradient(60% 60% at 85% 0%, rgb(176 141 62 / 0.28), transparent 70%),
+    radial-gradient(50% 60% at 0% 100%, rgb(29 98 94 / 0.55), transparent 70%);
+}
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}

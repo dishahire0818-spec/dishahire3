@@ -71,6 +71,18 @@ The plain admin password is never stored anywhere, only its hash.
 
 Without a verified domain, set `ALERT_EMAIL_TO` to the email you signed up to Resend with.
 
+## Images
+
+All photos are from [Unsplash](https://unsplash.com/license): free for commercial use, no attribution required. By default they are loaded through Next.js image optimization, so Vercel serves resized copies from your own domain.
+
+To store the files in the project instead:
+
+```bash
+npm run download-images
+```
+
+Then set `USE_LOCAL_IMAGES = true` in `lib/site.ts`. To use your own photos (recommended: your office and team), put them in `public/images/` with the same names.
+
 ## Editing content
 
 - Contact details, industries, services, values, FAQ and photos: `lib/site.ts`

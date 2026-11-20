@@ -4,18 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { NAV } from "@/lib/site";
+import { CONTACT, NAV } from "@/lib/site";
 import { Logo } from "./Logo";
-import { btn, cn } from "./ui";
+import { btn, cn, WhatsAppIcon } from "./ui";
 
 /** The active-link state needs the URL, so it streams in; the fallback is the same header without highlighting. */
 export function Header() {
   return (
-    <Suspense fallback={<HeaderView pathname={null} />}>
+    <>
+      <Suspense fallback={<HeaderView pathname={null} />}>
       <HeaderWithPath />
-    </Suspense>
+      </Suspense>
+    </>
   );
 }
+
 
 function HeaderWithPath() {
   return <HeaderView pathname={usePathname()} />;
@@ -41,6 +44,7 @@ function HeaderView({ pathname }: { pathname: string | null }) {
   const close = () => setOpen(false);
 
   return (
+    <>
     <header
       className={cn(
         "sticky top-0 z-50 bg-white/90 backdrop-blur transition-shadow",
@@ -83,33 +87,48 @@ function HeaderView({ pathname }: { pathname: string | null }) {
         </button>
       </div>
 
-      {open && (
-        <div id="mobile-nav" className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-white md:hidden">
-          <nav aria-label="Mobile" className="container-page flex flex-col py-4">
-            {NAV.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={close}
-                className={cn(
-                  "border-b border-line py-4 font-display text-3xl",
-                  isActive(l.href) ? "text-gold-700" : "text-brand-900",
-                )}
-              >
-                {l.name}
-              </Link>
-            ))}
-            <div className="mt-8 grid gap-3">
-              <Link href="/contact?type=employer" onClick={close} className={cn(btn.dark, btn.lg)}>
-                Hire talent
-              </Link>
-              <Link href="/jobs" onClick={close} className={cn(btn.outline, btn.lg)}>
-                Find a job
-              </Link>
-            </div>
-          </nav>
-        </div>
-      )}
     </header>
+      {open && (
+      <div id="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu" className="fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-white md:hidden">
+        <div className="container-page flex h-16 shrink-0 items-center justify-between border-b border-line">
+          <Logo />
+          <button type="button" onClick={close} className="-mr-2 rounded-full p-2 text-brand-900" aria-label="Close menu">
+            <X size={24} />
+          </button>
+        </div>
+        <nav aria-label="Mobile" className="container-page flex flex-1 flex-col py-4">
+          {NAV.map((l, i) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={close}
+              className={cn(
+                "enter flex items-baseline justify-between border-b border-line py-4 font-display text-4xl",
+                isActive(l.href) ? "text-gold-700" : "text-brand-900",
+              )}
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
+              {l.name}
+              <span className="font-sans text-xs text-muted">0{i + 1}</span>
+            </Link>
+          ))}
+          <div className="mt-8 grid gap-3">
+            <Link href="/contact?type=employer" onClick={close} className={cn(btn.dark, btn.lg)}>
+              Hire talent
+            </Link>
+            <Link href="/jobs" onClick={close} className={cn(btn.outline, btn.lg)}>
+              Find a job
+            </Link>
+          </div>
+          <div className="mt-auto flex items-center justify-between pt-10 text-sm text-muted">
+            <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>
+            <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-brand-900">
+              <WhatsAppIcon size={15} /> WhatsApp
+            </a>
+          </div>
+        </nav>
+      </div>
+    )}
+    </>
   );
 }

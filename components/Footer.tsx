@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowUp, Mail, MapPin, Phone } from "lucide-react";
-import { CONTACT, NAV } from "@/lib/site";
+import { ArrowUp } from "lucide-react";
+import { CONTACT } from "@/lib/site";
+import { Logo } from "./Logo";
 import { InstagramIcon, LinkedInIcon, WhatsAppIcon } from "./ui";
 import { Year } from "./Year";
 
@@ -11,17 +11,42 @@ const socials = [
   { label: "WhatsApp", href: CONTACT.whatsapp, Icon: WhatsAppIcon },
 ];
 
+const COLUMNS = [
+  {
+    title: "Company",
+    links: [
+      { name: "About", href: "/about" },
+      { name: "Services", href: "/services" },
+      { name: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Employers",
+    links: [
+      { name: "Hire talent", href: "/contact?type=employer" },
+      { name: "Recruitment & staffing", href: "/services#recruitment" },
+      { name: "HR consultancy", href: "/services#hr" },
+    ],
+  },
+  {
+    title: "Job seekers",
+    links: [
+      { name: "Browse jobs", href: "/jobs" },
+      { name: "Submit your resume", href: "/contact?type=candidate" },
+    ],
+  },
+];
+
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-line bg-white">
-      <div className="container-page grid gap-10 pt-14 pb-8 md:grid-cols-[1.4fr_1fr_1.2fr]">
-        <div className="max-w-sm space-y-4">
-          <p className="font-display text-2xl text-brand-900">Right talent, right direction.</p>
-          <p className="text-sm leading-relaxed text-muted">
-            A recruitment consultancy from Rajkot connecting people and organisations through ethical, transparent,
-            result-oriented hiring.
+      <div className="container-page grid gap-12 py-14 sm:py-16 lg:grid-cols-[1.3fr_2fr]">
+        <div className="max-w-xs">
+          <Logo />
+          <p className="mt-5 text-sm leading-relaxed text-muted">
+            Recruitment consultancy in Rajkot, Gujarat. Ethical, transparent hiring, and always free for job seekers.
           </p>
-          <div className="flex gap-2 pt-1">
+          <div className="mt-6 flex gap-2">
             {socials.map(({ label, href, Icon }) => (
               <a
                 key={label}
@@ -29,70 +54,49 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="grid h-10 w-10 place-items-center rounded-full border border-line text-brand-900 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white"
+                className="grid h-9 w-9 place-items-center rounded-full border border-line text-brand-900 transition-colors hover:border-brand-900 hover:bg-brand-900 hover:text-white"
               >
-                <Icon size={16} />
+                <Icon size={15} />
               </a>
             ))}
           </div>
         </div>
-        <nav aria-label="Footer">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.18em] text-gold-700">Explore</p>
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
-            {NAV.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="text-brand-900 hover:text-gold-700">
-                  {l.name}
-                </Link>
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1fr_1fr_1fr_1.5fr]">
+          {COLUMNS.map((col) => (
+            <nav key={col.title} aria-label={col.title}>
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">{col.title}</p>
+              <ul className="mt-4 space-y-2.5 text-sm">
+                {col.links.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="text-brand-900 transition-colors hover:text-gold-700">
+                      {l.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">Contact</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-brand-900">
+              <li>{CONTACT.address}</li>
+              <li>
+                <a href={CONTACT.phoneHref} className="hover:text-gold-700">{CONTACT.phone}</a>
               </li>
-            ))}
-            <li>
-              <Link href="/contact?type=candidate" className="text-brand-900 hover:text-gold-700">
-                Submit resume
-              </Link>
-            </li>
-          </ul>
-        </nav>
-        <div>
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.18em] text-gold-700">Contact</p>
-          <ul className="space-y-3 text-sm text-brand-900">
-            <li className="flex gap-3">
-              <MapPin size={16} className="mt-0.5 shrink-0 text-gold-700" /> {CONTACT.address}
-            </li>
-            <li className="flex gap-3">
-              <Mail size={16} className="mt-0.5 shrink-0 text-gold-700" />
-              <a href={`mailto:${CONTACT.email}`} className="hover:text-gold-700">
-                {CONTACT.email}
-              </a>
-            </li>
-            <li className="flex gap-3">
-              <Phone size={16} className="mt-0.5 shrink-0 text-gold-700" />
-              <a href={CONTACT.phoneHref} className="hover:text-gold-700">
-                {CONTACT.phone}
-              </a>
-            </li>
-          </ul>
+              <li>
+                <a href={`mailto:${CONTACT.email}`} className="hover:text-gold-700">{CONTACT.email}</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-
-      {/* Giant wordmark, as in the reference */}
-      <div className="container-page overflow-hidden" aria-hidden>
-        <div className="flex select-none items-end justify-center gap-[2vw] pt-4 leading-[0.8]">
-          <Image src="/emblem.png" alt="" width={160} height={160} unoptimized className="mb-[1.5vw] h-[11vw] max-h-40 w-auto" />
-          <span className="font-display text-[19vw] tracking-tight text-brand-900 lg:text-[13.5rem]">
-            Disha<span className="italic text-gold-500">Hire</span>
-          </span>
-        </div>
-      </div>
-
-      <div className="bg-brand-900 text-white/70">
-        <div className="container-page flex flex-col items-center justify-between gap-2 py-4 text-xs sm:flex-row">
+      <div className="border-t border-line">
+        <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs text-muted sm:flex-row">
           <p>
-            © <Year /> DishaHire Consultancy
+            © <Year /> DishaHire Consultancy. All rights reserved.
           </p>
-          <p>All rights reserved</p>
-          <a href="#top" className="inline-flex items-center gap-1.5 hover:text-white">
-            <ArrowUp size={14} /> To top
+          <a href="#top" className="inline-flex items-center gap-1.5 hover:text-brand-900">
+            Back to top <ArrowUp size={13} />
           </a>
         </div>
       </div>

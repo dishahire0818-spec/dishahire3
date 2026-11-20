@@ -64,19 +64,34 @@ export const SERVICES = [
     slug: "recruitment",
     title: "Recruitment & Staffing",
     summary: "Scalable hiring for teams of every size, from niche startups to large enterprises.",
-    items: ["Permanent Staffing", "Contract & Temporary Staffing", "Bulk Hiring Solutions"],
+    bestFor: "Growing teams, replacements and new departments",
+    items: [
+      { name: "Permanent Staffing", desc: "Full-time hires from junior to senior roles, screened for skills and long-term fit." },
+      { name: "Contract & Temporary Staffing", desc: "Flexible manpower for projects, seasonal peaks and short-notice replacements." },
+      { name: "Bulk Hiring Solutions", desc: "High-volume drives for sales, operations and production teams, organised end to end." },
+    ],
   },
   {
     slug: "sourcing",
     title: "Talent Sourcing",
     summary: "Expert-led discovery of the right people, screened and assessed before they reach you.",
-    items: ["Resume Screening & Shortlisting", "Candidate Assessment & Interviews", "Background Verification Support"],
+    bestFor: "Hard-to-fill and specialist roles",
+    items: [
+      { name: "Resume Screening & Shortlisting", desc: "We filter applications against your criteria, so you only review relevant profiles." },
+      { name: "Candidate Assessment & Interviews", desc: "Structured first-round interviews and skill checks before candidates reach you." },
+      { name: "Background Verification Support", desc: "Help with reference, education and employment checks before you make an offer." },
+    ],
   },
   {
     slug: "hr",
     title: "HR Consultancy",
     summary: "Practical guidance on HR policy, workforce planning and getting new hires productive fast.",
-    items: ["HR Policy Support", "Manpower Planning", "Employee Onboarding Assistance"],
+    bestFor: "MSMEs and startups building HR foundations",
+    items: [
+      { name: "HR Policy Support", desc: "Leave, attendance, conduct and other policies drafted or reviewed for your organisation." },
+      { name: "Manpower Planning", desc: "Plan headcount, roles and hiring timelines around your growth targets." },
+      { name: "Employee Onboarding Assistance", desc: "Joining formalities, documentation and first-week plans that help new hires settle in." },
+    ],
   },
 ];
 
@@ -107,12 +122,41 @@ export const FAQ = [
   },
 ];
 
-/** Unsplash photos already used by the previous site. */
+/**
+ * Photos are from Unsplash (https://unsplash.com/license): free for commercial use, no attribution required.
+ * Run `npm run download-images` and set USE_LOCAL_IMAGES = true to self-host them from /public/images.
+ */
+const USE_LOCAL_IMAGES = false;
+const photo = (name: string, id: string) =>
+  USE_LOCAL_IMAGES ? `/images/${name}.jpg` : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80&w=1600`;
+
 export const PHOTOS = {
-  consultant: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200",
-  office: "https://images.unsplash.com/photo-1573161158971-d1b07323869a?auto=format&fit=crop&q=80&w=1600",
-  meeting: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200",
-  building: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-  team: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200",
-  interview: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1200",
+  consultant: photo("consultant", "1573496359142-b8d87734a5a2"),
+  office: photo("office", "1573161158971-d1b07323869a"),
+  meeting: photo("meeting", "1516321318423-f06f85e504b3"),
+  building: photo("building", "1486406146926-c627a92ad1ab"),
+  team: photo("team", "1504384308090-c894fdcc538d"),
+  interview: photo("interview", "1600880292203-757bb62b4baf"),
 };
+
+/** Step-by-step process for each audience (home page timeline and services page). */
+export const FLOWS = {
+  employers: {
+    label: "For employers",
+    steps: [
+      { title: "Share your requirement", body: "Role, skills, experience, budget and location, in one short form or a quick call." },
+      { title: "We source & screen", body: "We search our network, screen resumes and assess candidates for you." },
+      { title: "Review & interview", body: "A shortlist in 3–5 business days. We coordinate interviews and feedback." },
+      { title: "Hire with confidence", body: "Offer support, background checks and joining follow-ups until day one." },
+    ],
+  },
+  candidates: {
+    label: "For job seekers",
+    steps: [
+      { title: "Share your profile", body: "Submit your details and resume in two minutes, or apply to an open job." },
+      { title: "Get matched", body: "Consultants match your skills and goals with openings across 15 industries." },
+      { title: "Prepare & interview", body: "We brief you on the company and role and schedule interviews for you." },
+      { title: "Get hired, free", body: "We never charge candidates, and we stay in touch until you've joined." },
+    ],
+  },
+} as const;

@@ -1,30 +1,34 @@
 import Link from "next/link";
-import { Arc, btn, cn } from "./ui";
+import { ArrowRight } from "lucide-react";
+import { CONTACT } from "@/lib/site";
+import { btn, cn, Compass, WhatsAppIcon } from "./ui";
 
-export function CtaSection() {
+export function CtaSection({ title, body }: { title?: React.ReactNode; body?: string }) {
   return (
-    <section className="container-page py-20 sm:py-28">
-      <div className="relative grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-        <div className="relative">
-          <Arc className="absolute -top-10 -left-10 h-44 w-44 sm:-left-14" />
-          <h2 className="relative pt-6 pl-8 text-4xl leading-tight text-brand-900 sm:text-6xl">
-            Ready to choose the
-            <br />
-            <span className="italic text-gold-700">right direction?</span>
+    <section className="container-page py-16 sm:py-24">
+      <div className="reveal relative overflow-hidden rounded-[2.5rem] bg-brand-900 px-6 py-14 text-white sm:px-14 sm:py-20">
+        <Compass light className="absolute -right-20 -bottom-20 hidden h-[24rem] w-[24rem] opacity-50 md:block" />
+        <div className="relative max-w-2xl">
+          <h2 className="text-4xl leading-[1.05] sm:text-6xl">
+            {title ?? (
+              <>
+                Ready to choose the <span className="italic text-gold-300">right direction?</span>
+              </>
+            )}
           </h2>
-        </div>
-        <div className="space-y-5 lg:pl-10">
-          <p className="text-muted">
-            Whether you are hiring or looking to be hired, tell us what you need. A consultant will get back to you
-            within 24 hours.
+          <p className="mt-5 max-w-lg text-white/70 sm:text-lg">
+            {body ?? "Whether you're hiring or looking to be hired, tell us what you need. A consultant replies within 24 hours."}
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link href="/contact?type=employer" className={cn(btn.gold, btn.lg)}>
-              I&apos;m hiring
+              I&apos;m hiring <ArrowRight size={18} />
             </Link>
-            <Link href="/contact?type=candidate" className={cn(btn.outline, btn.lg)}>
+            <Link href="/contact?type=candidate" className={cn(btn.outlineLight, btn.lg)}>
               I&apos;m looking for a job
             </Link>
+            <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-3 py-3.5 text-white/80 hover:text-white">
+              <WhatsAppIcon size={18} /> Chat on WhatsApp
+            </a>
           </div>
         </div>
       </div>
