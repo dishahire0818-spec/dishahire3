@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRight, ArrowUpRight, Check, ClipboardList, MapPin, Quote, Search, UserPlus, Users } from "lucide-react";
@@ -10,7 +9,7 @@ import { IndustryMarquee } from "@/components/Marquee";
 import { btn, cn, SectionHeading } from "@/components/ui";
 import { getOpenJobs } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
-import { PHOTOS, SERVICES } from "@/lib/site";
+import { SERVICES } from "@/lib/site";
 
 
 const WHY = [
@@ -49,14 +48,14 @@ export default async function HomePage() {
             </p>
 
             {/* search */}
-            <form action="/jobs" method="get" className="enter mt-9 flex max-w-xl flex-col gap-2 rounded-2xl bg-white p-2 shadow-[0_30px_80px_-30px_rgba(0,0,0,.7)] sm:flex-row sm:items-center sm:rounded-full" style={{ animationDelay: "240ms" }}>
-              <label className="flex flex-1 items-center gap-2.5 px-3 py-1.5 sm:pl-4">
+            <form action="/jobs" method="get" className="enter mt-9 flex max-w-[36rem] flex-col gap-2 rounded-2xl bg-white p-2 shadow-[0_30px_80px_-30px_rgba(0,0,0,.7)] sm:flex-row sm:items-center sm:rounded-full" style={{ animationDelay: "240ms" }}>
+              <label className="flex min-w-0 flex-1 items-center gap-2.5 px-3 py-1.5 sm:pl-4">
                 <Search size={18} className="shrink-0 text-muted" aria-hidden />
                 <span className="sr-only">Job title or skill</span>
                 <input name="q" placeholder="Job title or skill" className="min-w-0 flex-1 bg-transparent py-2 text-[0.95rem] text-brand-950 outline-none placeholder:text-muted" />
               </label>
               <span className="hidden h-7 w-px bg-line sm:block" aria-hidden />
-              <label className="flex items-center gap-2.5 px-3 py-1.5 sm:w-44">
+              <label className="flex min-w-0 items-center gap-2.5 px-3 py-1.5 sm:w-36 sm:flex-none">
                 <MapPin size={17} className="shrink-0 text-muted" aria-hidden />
                 <span className="sr-only">City</span>
                 <input name="loc" placeholder="City" className="min-w-0 flex-1 bg-transparent py-2 text-[0.95rem] text-brand-950 outline-none placeholder:text-muted" />
@@ -98,152 +97,121 @@ export default async function HomePage() {
       <IndustryMarquee />
 
       {/* ───────── TWO PATHS ───────── */}
-      <section className="container-page py-20 sm:py-28">
-        <SectionHeading index="01" eyebrow="Two ways we help" title={<>One consultancy, <span className="text-shine">both sides</span> of the table</>} />
-        <div className="mt-12 grid gap-5 lg:grid-cols-2">
-          <article className="reveal relative flex flex-col overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white sm:p-12">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-300">For employers</p>
-            <h3 className="mt-4 text-4xl leading-tight sm:text-5xl">Build your team without the hiring headache</h3>
-            <ul className="mt-8 space-y-3 text-white/85">
-              {["Screened shortlist in 3–5 business days", "Permanent, contract and bulk hiring", "Interview coordination and offer support", "HR policy and onboarding guidance"].map((t) => (
-                <li key={t} className="flex gap-3">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold-500 text-brand-950"><Check size={12} strokeWidth={3} /></span>
-                  {t}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-auto flex flex-wrap items-center gap-5 pt-10">
-              <Link href="/contact?type=employer" className={cn(btn.gold, btn.lg)}>Share a requirement</Link>
-              <Link href="/services" className="inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white">Our services <ArrowUpRight size={15} /></Link>
-            </div>
-          </article>
-          <article className="reveal relative flex flex-col overflow-hidden rounded-[2rem] bg-gold-100 p-8 sm:p-12">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-700">For job seekers</p>
-            <h3 className="mt-4 text-4xl leading-tight text-brand-900 sm:text-5xl">Get matched with roles that fit your goals</h3>
-            <ul className="mt-8 space-y-3 text-brand-900">
-              {["100% free, we never charge candidates", "Openings across 15 industries", "Interview preparation and scheduling", "Apply online in two minutes"].map((t) => (
-                <li key={t} className="flex gap-3">
-                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-900 text-white"><Check size={12} strokeWidth={3} /></span>
-                  {t}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-auto flex flex-wrap items-center gap-5 pt-10">
-              <Link href="/jobs" className={cn(btn.dark, btn.lg)}>Browse open jobs</Link>
-              <Link href="/contact?type=candidate" className="inline-flex items-center gap-1.5 text-sm text-brand-900 hover:text-gold-700">Submit your resume <ArrowUpRight size={15} /></Link>
-            </div>
-          </article>
+      <section className="container-page py-24 sm:py-32">
+        <SectionHeading index="01" eyebrow="Two ways we help" title={<>One consultancy, <span className="text-shine">both sides</span> of the table.</>} />
+        <div className="mt-14 grid border-y border-line md:grid-cols-2 md:divide-x md:divide-line">
+          {[
+            {
+              who: "For employers",
+              title: "Build your team without the hiring headache.",
+              points: ["Screened shortlist in 3–5 business days", "Permanent, contract and bulk hiring", "Interview coordination and offer support", "HR policy and onboarding guidance"],
+              cta: { label: "Share a requirement", href: "/contact?type=employer" },
+              link: { label: "Our services", href: "/services" },
+            },
+            {
+              who: "For job seekers",
+              title: "Get matched with roles that fit your goals.",
+              points: ["Always free, we never charge candidates", "Openings across 15 industries", "Interview preparation and scheduling", "Apply online in two minutes"],
+              cta: { label: "Browse open jobs", href: "/jobs" },
+              link: { label: "Submit your resume", href: "/contact?type=candidate" },
+            },
+          ].map((c, k) => (
+            <article key={c.who} className={cn("reveal py-12", k === 0 ? "md:pr-14" : "border-t border-line md:border-t-0 md:pl-14")}>
+              <p className="text-sm font-semibold text-gold-700">{c.who}</p>
+              <h3 className="mt-3 text-3xl leading-tight text-brand-950 sm:text-[2.1rem]">{c.title}</h3>
+              <ul className="mt-8 space-y-3.5">
+                {c.points.map((t) => (
+                  <li key={t} className="flex items-start gap-3 text-brand-900/80">
+                    <Check size={18} className="mt-0.5 shrink-0 text-brand-700" strokeWidth={2.5} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-10 flex flex-wrap items-center gap-6">
+                <Link href={c.cta.href} className={k === 0 ? btn.dark : btn.outline}>{c.cta.label} <ArrowRight size={16} /></Link>
+                <Link href={c.link.href} className="group inline-flex items-center gap-1.5 text-sm font-semibold text-brand-900">
+                  {c.link.label} <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ───────── SERVICES ───────── */}
+      <section className="bg-cream py-24 sm:py-32">
+        <div className="container-page">
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <SectionHeading index="02" eyebrow="Services" title={<>Everything you need to <span className="text-shine">hire smarter.</span></>} />
+            <Link href="/services" className={cn(btn.outline, "reveal self-start lg:self-auto")}>All services <ArrowRight size={16} /></Link>
+          </div>
+          <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-line bg-line lg:grid-cols-3">
+            {SERVICES.map((svc, k) => {
+              const Icon = [Users, UserPlus, ClipboardList][k];
+              return (
+                <Link key={svc.slug} href={`/services#${svc.slug}`} className="reveal group flex flex-col bg-white p-8 transition-colors hover:bg-brand-950 sm:p-10">
+                  <div className="flex items-center justify-between">
+                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-800 transition-colors group-hover:bg-white/10 group-hover:text-gold-300">
+                      <Icon size={20} />
+                    </span>
+                    <span className="text-sm font-semibold text-brand-900/30 tabular-nums transition-colors group-hover:text-white/40">0{k + 1}</span>
+                  </div>
+                  <h3 className="mt-10 text-2xl text-brand-950 transition-colors group-hover:text-white">{svc.title}</h3>
+                  <p className="mt-3 text-muted transition-colors group-hover:text-white/70">{svc.summary}</p>
+                  <ul className="mt-8 space-y-2.5 border-t border-line pt-6 text-sm text-brand-900/80 transition-colors group-hover:border-white/10 group-hover:text-white/80">
+                    {svc.items.map((it) => (
+                      <li key={it.name} className="flex items-center gap-2.5">
+                        <span className="h-1 w-1 rounded-full bg-gold-500" />
+                        {it.name}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-10 text-sm font-semibold text-brand-900 transition-colors group-hover:text-gold-300">
+                    Learn more <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* ───────── PROCESS ───────── */}
-      <section className="container-page py-20 sm:py-28">
-        <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
-          <SectionHeading index="02" eyebrow="How it works" title={<>A clear path from <span className="text-shine">hello</span> to hired</>} />
-        </div>
-        <div className="mt-10">
+      <section className="container-page py-24 sm:py-32">
+        <SectionHeading index="03" eyebrow="How it works" title={<>A clear path from <span className="text-shine">hello</span> to hired.</>} />
+        <div className="mt-12">
           <Process />
         </div>
       </section>
 
-      {/* ───────── SERVICES BENTO ───────── */}
-      <section className="bg-cream py-20 sm:py-28">
-        <div className="container-page">
-          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <SectionHeading index="03" eyebrow="Services" title={<>Everything you need<br />to hire <span className="text-shine">smarter</span></>} />
-            <Link href="/services" className={cn(btn.outline, "reveal self-start bg-white lg:self-auto")}>All services <ArrowRight size={16} /></Link>
-          </div>
-          <div className="mt-12 grid gap-4 lg:grid-cols-6 lg:grid-rows-[auto_auto]">
-            {/* Recruitment: large dark tile */}
-            <Link href="/services#recruitment" className="reveal group relative overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white lg:col-span-4 lg:row-span-1 sm:p-10">
-              <div className="flex items-start justify-between gap-6">
-                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gold-500 text-brand-950"><Users size={20} /></span>
-                <ArrowUpRight className="text-white/50 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-gold-300" />
-              </div>
-              <h3 className="mt-8 text-4xl">{SERVICES[0].title}</h3>
-              <p className="mt-3 max-w-md text-white/70">{SERVICES[0].summary}</p>
-              <ul className="mt-8 flex flex-wrap gap-2">
-                {SERVICES[0].items.map((i) => (
-                  <li key={i.name} className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/85">{i.name}</li>
-                ))}
-              </ul>
-            </Link>
-            {/* Photo tile */}
-            <div className="reveal relative min-h-64 overflow-hidden rounded-[2rem] bg-brand-800 lg:col-span-2">
-              <Image src={PHOTOS.interview} alt="Candidate interview in progress" fill sizes="(min-width:1024px) 30vw, 100vw" className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 to-transparent" />
-              <p className="absolute right-6 bottom-6 left-6 font-display text-2xl leading-tight text-white">Bulk hiring, organised end to end</p>
-            </div>
-            {/* Sourcing */}
-            <Link href="/services#sourcing" className="reveal group relative overflow-hidden rounded-[2rem] border border-line bg-white p-8 lg:col-span-3 sm:p-10">
-              <div className="flex items-start justify-between">
-                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-900 text-gold-300"><UserPlus size={20} /></span>
-                <ArrowUpRight className="text-muted transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-brand-900" />
-              </div>
-              <h3 className="mt-8 text-3xl text-brand-900 sm:text-4xl">{SERVICES[1].title}</h3>
-              <p className="mt-3 text-muted">{SERVICES[1].summary}</p>
-              <ul className="mt-6 space-y-2">
-                {SERVICES[1].items.map((i) => (
-                  <li key={i.name} className="flex items-center gap-2.5 text-sm text-brand-900"><Check size={15} className="text-gold-700" />{i.name}</li>
-                ))}
-              </ul>
-            </Link>
-            {/* HR */}
-            <Link href="/services#hr" className="reveal group relative overflow-hidden rounded-[2rem] bg-gold-100 p-8 lg:col-span-3 sm:p-10">
-              <div className="flex items-start justify-between">
-                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-900 text-gold-300"><ClipboardList size={20} /></span>
-                <ArrowUpRight className="text-muted transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-brand-900" />
-              </div>
-              <h3 className="mt-8 text-3xl text-brand-900 sm:text-4xl">{SERVICES[2].title}</h3>
-              <p className="mt-3 text-brand-900/70">{SERVICES[2].summary}</p>
-              <ul className="mt-6 space-y-2">
-                {SERVICES[2].items.map((i) => (
-                  <li key={i.name} className="flex items-center gap-2.5 text-sm text-brand-900"><Check size={15} className="text-gold-700" />{i.name}</li>
-                ))}
-              </ul>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* ───────── LATEST JOBS ───────── */}
-      <section className="container-page py-20 sm:py-28">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <SectionHeading index="04" eyebrow="Now hiring" title={<>Latest <span className="text-shine">openings</span></>} />
-          <Link href="/jobs" className={cn(btn.outline, "reveal self-start sm:self-auto")}>View all jobs <ArrowRight size={16} /></Link>
-        </div>
-        <div className="mt-10">
-          <Suspense fallback={<div className="grid gap-3"><JobRowSkeleton /><JobRowSkeleton /><JobRowSkeleton /></div>}>
-            <LatestJobs />
-          </Suspense>
+      <section className="border-t border-line">
+        <div className="container-page py-24 sm:py-32">
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+            <SectionHeading index="04" eyebrow="Now hiring" title={<>Latest <span className="text-shine">openings.</span></>} />
+            <Link href="/jobs" className={cn(btn.outline, "reveal self-start sm:self-auto")}>View all jobs <ArrowRight size={16} /></Link>
+          </div>
+          <div className="mt-12">
+            <Suspense fallback={<div className="grid gap-3"><JobRowSkeleton /><JobRowSkeleton /><JobRowSkeleton /></div>}>
+              <LatestJobs />
+            </Suspense>
+          </div>
         </div>
       </section>
 
       {/* ───────── WHY US ───────── */}
-      <section className="border-t border-line py-20 sm:py-28">
-        <div className="container-page grid items-center gap-14 lg:grid-cols-2">
-          <div className="reveal relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-brand-800 lg:aspect-auto lg:h-full lg:min-h-[34rem]">
-            <Image src={PHOTOS.office} alt="The DishaHire team at work" fill sizes="(min-width:1024px) 45vw, 100vw" className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/10 to-transparent" />
-            <div className="absolute right-6 bottom-6 left-6 rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
-              <p className="font-display text-3xl">દિશા <span className="text-white/50">·</span> <span className="text-shine-light">Disha</span></p>
-              <p className="mt-1 text-sm text-white/75">means &ldquo;direction&rdquo;. It&apos;s what we try to give every client and every candidate.</p>
-            </div>
-          </div>
-          <div>
-            <SectionHeading index="05" eyebrow="Why DishaHire" title={<>Why companies <span className="text-shine">choose us</span></>} intro="Smarter hiring, better fits, and a partner who actually picks up the phone." />
-            <ol className="mt-10 divide-y divide-line border-y border-line">
-              {WHY.map((w, i) => (
-                <li key={w.title} className="reveal grid grid-cols-[3rem_1fr] gap-4 py-6">
-                  <span className="font-display text-2xl text-gold-700">0{i + 1}</span>
-                  <div>
-                    <h3 className="text-2xl text-brand-900">{w.title}</h3>
-                    <p className="mt-1.5 text-muted">{w.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+      <section className="bg-cream py-24 sm:py-32">
+        <div className="container-page">
+          <SectionHeading align="center" index="05" eyebrow="Why DishaHire" title={<>Why companies <span className="text-shine">choose us.</span></>} intro="Smarter hiring, better fits, and a partner who actually picks up the phone." />
+          <ol className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            {WHY.map((w, k) => (
+              <li key={w.title} className="reveal border-t-2 border-brand-950 pt-6">
+                <span className="text-sm font-semibold text-gold-700 tabular-nums">0{k + 1}</span>
+                <h3 className="mt-3 text-xl text-brand-950">{w.title}</h3>
+                <p className="mt-2 leading-relaxed text-muted">{w.body}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
