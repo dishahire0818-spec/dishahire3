@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Eye, Target } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { IndustryMarquee } from "@/components/Marquee";
-import { Compass, SectionHeading } from "@/components/ui";
-import { INDUSTRIES, PHOTOS, VALUES } from "@/lib/site";
+import { SectionHeading } from "@/components/ui";
+import { INDUSTRIES, VALUES } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* HERO: split statement + photo mosaic */}
+      {/* HERO: split statement + brand panel */}
       <section className="relative overflow-hidden">
         <div className="container-page grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.05fr_1fr]">
           <div>
@@ -31,32 +31,28 @@ export default function AboutPage() {
               DishaHire is a professional recruitment consultancy from Rajkot, Gujarat, bridging the gap between ambitious
               job seekers and forward-thinking employers through end-to-end recruitment.
             </p>
-            <div className="enter mt-10 inline-flex items-center gap-5 rounded-2xl border border-line p-4 pr-6" style={{ animationDelay: "240ms" }}>
-              <Compass className="h-16 w-16 shrink-0" />
-              <p className="text-sm text-muted">
-                <span className="font-display text-2xl text-brand-900">દિશા · Disha</span>
-                <br />
-                Gujarati for <em>direction</em>. It&apos;s the promise in our name.
+          </div>
+          {/* Brand panel (no stock photos) */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="enter col-span-2 flex min-h-64 flex-col items-center justify-center overflow-hidden rounded-[2rem] bg-brand-950 px-6 py-12 sm:min-h-72" style={{ animationDelay: "120ms" }}>
+              <Image src="/logo.png" alt="DishaHire: Right talent, right direction" width={360} height={124} className="h-auto w-[78%] max-w-[22rem]" priority />
+            </div>
+            <div className="enter rounded-[2rem] bg-cream p-6 sm:p-7" style={{ animationDelay: "220ms" }}>
+              <p className="font-display text-3xl text-brand-950">દિશા</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                <span className="font-semibold text-brand-900">Disha</span> is Gujarati for <em>direction</em>, the promise in our name.
               </p>
             </div>
-          </div>
-          <div className="relative grid h-[30rem] grid-cols-2 grid-rows-2 gap-4 sm:h-[34rem]">
-            <div className="enter relative row-span-2 overflow-hidden rounded-[2rem] bg-brand-800" style={{ animationDelay: "120ms" }}>
-              <Image src={PHOTOS.office} alt="Consultants in a meeting" fill priority sizes="(min-width:1024px) 22vw, 50vw" className="object-cover" />
-            </div>
-            <div className="enter relative overflow-hidden rounded-[2rem] bg-brand-100" style={{ animationDelay: "220ms" }}>
-              <Image src={PHOTOS.meeting} alt="Recruiter reviewing profiles" fill sizes="(min-width:1024px) 22vw, 50vw" className="object-cover" />
-            </div>
-            <div className="enter flex flex-col justify-end overflow-hidden rounded-[2rem] bg-brand-900 p-6 text-white" style={{ animationDelay: "320ms" }}>
+            <div className="enter rounded-[2rem] bg-brand-900 p-6 text-white sm:p-7" style={{ animationDelay: "320ms" }}>
               <p className="font-display text-5xl text-gold-300">15</p>
-              <p className="mt-1 text-sm text-white/75">industries served across Gujarat and beyond</p>
+              <p className="mt-2 text-sm leading-relaxed text-white/70">industries served across Gujarat and beyond</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* STORY */}
-      <section className="border-t border-line bg-cream py-20 sm:py-28">
+      <section className="border-t border-line bg-cream py-16 sm:py-20">
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.2fr]">
           <SectionHeading index="01" eyebrow="Who we are" title={<>Hiring built on <span className="text-shine">trust</span></>} />
           <div className="reveal space-y-5 text-lg leading-relaxed text-brand-900/80">
@@ -85,7 +81,7 @@ export default function AboutPage() {
       </section>
 
       {/* MISSION / VISION */}
-      <section className="container-page grid gap-5 py-20 sm:py-28 md:grid-cols-2">
+      <section className="container-page grid gap-5 py-16 sm:py-20 md:grid-cols-2">
         <article className="reveal relative overflow-hidden rounded-[2rem] bg-brand-900 p-8 text-white sm:p-12">
           <Target className="text-gold-300" size={28} />
           <h2 className="mt-8 text-4xl sm:text-5xl">Our mission</h2>
@@ -105,7 +101,7 @@ export default function AboutPage() {
       </section>
 
       {/* VALUES: numbered editorial list */}
-      <section className="border-y border-line py-20 sm:py-28">
+      <section className="border-y border-line py-16 sm:py-20">
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.4fr]">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <SectionHeading index="02" eyebrow="Foundation" title={<>The values we <span className="text-shine">hire by</span></>} intro="Five principles that guide every brief we take and every candidate we put forward." />
@@ -123,7 +119,7 @@ export default function AboutPage() {
       </section>
 
       {/* INDUSTRIES */}
-      <section className="py-20 sm:py-28">
+      <section className="py-16 sm:py-20">
         <div className="container-page">
           <SectionHeading index="03" eyebrow="Expertise" title={<>Industries we <span className="text-shine">serve</span></>} />
           <ul className="mt-10 flex flex-wrap gap-2.5">

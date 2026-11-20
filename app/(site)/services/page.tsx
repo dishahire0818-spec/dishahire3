@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, Check, ClipboardList, UserPlus, Users } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { btn, cn, SectionHeading } from "@/components/ui";
-import { FLOWS, PHOTOS, SERVICES } from "@/lib/site";
+import { FLOWS, SERVICES } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Recruitment & HR Services",
@@ -14,7 +13,6 @@ export const metadata: Metadata = {
 };
 
 const ICONS = [Users, UserPlus, ClipboardList];
-const IMAGES = [PHOTOS.building, PHOTOS.team, PHOTOS.interview];
 
 const MODELS = [
   { name: "Permanent hiring", for: "Long-term roles in your core team", how: "Screened shortlist in 3–5 business days, interview coordination, offer and joining support" },
@@ -62,15 +60,15 @@ export default function ServicesPage() {
 
       {/* SERVICES: sticky title + detail cards */}
       {SERVICES.map((s, i) => (
-        <section key={s.slug} id={s.slug} className={cn("scroll-mt-20 py-20 sm:py-28", i % 2 === 1 && "bg-cream")}>
+        <section key={s.slug} id={s.slug} className={cn("scroll-mt-20 py-16 sm:py-20", i % 2 === 1 && "bg-cream")}>
           <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
             <div className="lg:sticky lg:top-28 lg:self-start">
               <SectionHeading index={`0${i + 1}`} eyebrow="Service" title={s.title} intro={s.summary} />
               <p className="reveal mt-6 inline-flex items-center gap-2 rounded-full bg-gold-100 px-4 py-2 text-sm text-brand-900">
-                <span className="font-medium">Best for:</span> {s.bestFor}
+                <span className="font-semibold">Best for:</span> {s.bestFor}
               </p>
-              <div className="reveal relative mt-8 hidden aspect-[16/10] overflow-hidden rounded-[2rem] bg-brand-100 lg:block">
-                <Image src={IMAGES[i]} alt="" fill sizes="40vw" className="object-cover" />
+              <div className="reveal mt-8 hidden lg:block">
+                <Link href="/contact?type=employer" className={btn.dark}>Discuss your requirement <ArrowRight size={16} /></Link>
               </div>
             </div>
             <ol className="grid gap-4">
@@ -97,7 +95,7 @@ export default function ServicesPage() {
       ))}
 
       {/* ENGAGEMENT MODELS */}
-      <section className="border-y border-line py-20 sm:py-28">
+      <section className="border-y border-line py-16 sm:py-20">
         <div className="container-page">
           <SectionHeading index="04" eyebrow="Engagement models" title={<>Pick the hiring model <span className="text-shine">that fits</span></>} />
           <div className="reveal mt-12 overflow-hidden rounded-[2rem] border border-line">
@@ -126,13 +124,12 @@ export default function ServicesPage() {
       </section>
 
       {/* PROCESS */}
-      <section className="py-20 sm:py-28">
+      <section className="py-16 sm:py-20">
         <div className="container-page">
           <SectionHeading index="05" eyebrow="Process" title={<>How an engagement <span className="text-shine">runs</span></>} />
           <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {FLOWS.employers.steps.map((s, i) => (
               <li key={s.title} className="reveal relative overflow-hidden rounded-[1.5rem] bg-cream p-7">
-                <span className="absolute -top-4 -right-1 font-display text-[7rem] leading-none text-brand-900/[0.06]">{i + 1}</span>
                 <span className="text-xs font-medium uppercase tracking-[0.16em] text-gold-700">Step {i + 1}</span>
                 <h3 className="mt-3 text-2xl text-brand-900">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>

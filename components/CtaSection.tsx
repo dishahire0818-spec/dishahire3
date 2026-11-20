@@ -6,8 +6,8 @@ import { btn, cn, Compass, WhatsAppIcon } from "./ui";
 export async function CtaSection({ title, body }: { title?: React.ReactNode; body?: string }) {
   const { contact } = await getSettings();
   return (
-    <section className="container-page py-16 sm:py-24">
-      <div className="reveal relative overflow-hidden rounded-[2.5rem] bg-brand-900 px-6 py-14 text-white sm:px-14 sm:py-20">
+    <section className="container-page py-12 sm:py-16">
+      <div className="reveal relative overflow-hidden rounded-[2.5rem] bg-brand-900 px-6 py-12 text-white sm:px-14 sm:py-16">
         <Compass light className="absolute -right-20 -bottom-20 hidden h-[24rem] w-[24rem] opacity-50 md:block" />
         <div className="relative max-w-2xl">
           <h2 className="text-4xl leading-[1.05] sm:text-6xl">

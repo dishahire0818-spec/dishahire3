@@ -12,10 +12,10 @@ export function Logo({ size = "md", className }: { size?: "md" | "lg"; full?: bo
       <Image
         src="/logo.png"
         alt="DishaHire: Right talent, right direction"
-        width={size === "lg" ? 300 : 175}
-        height={size === "lg" ? 103 : 60}
+        width={size === "lg" ? 360 : 154}
+        height={size === "lg" ? 124 : 53}
         priority={size === "md"}
-        className={size === "lg" ? "h-auto w-[260px] sm:w-[300px]" : "h-12 w-auto sm:h-[3.75rem]"}
+        className={size === "lg" ? "h-auto w-[280px] sm:w-[340px]" : "h-[2.65rem] w-auto sm:h-[3.3rem]"}
       />
     </Link>
   );

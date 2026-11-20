@@ -76,20 +76,12 @@ Without a verified domain, set `ALERT_EMAIL_TO` to the email you signed up to Re
 
 ## Images
 
-All photos are from [Unsplash](https://unsplash.com/license): free for commercial use, no attribution required. By default they are loaded through Next.js image optimization, so Vercel serves resized copies from your own domain.
-
-To store the files in the project instead:
-
-```bash
-npm run download-images
-```
-
-Then set `USE_LOCAL_IMAGES = true` in `lib/site.ts`. To use your own photos (recommended: your office and team), put them in `public/images/` with the same names.
+The site uses no stock photos, so nothing can break or need licensing. Branding comes from the official logo (`public/logo.png`). Post cover images are uploaded in **Admin → Updates** and stored in the database.
 
 ## Editing content
 
 - Contact details, home numbers, FAQ, testimonials, announcement: **Admin → Website content** (no code needed)
-- Industries, services, values and photos: `lib/site.ts`
+- Industries, services and values: `lib/site.ts`
 - Colours and fonts: `app/globals.css` (`@theme`) and `app/layout.tsx`
 - Page layouts: `app/(site)/*/page.tsx`
 

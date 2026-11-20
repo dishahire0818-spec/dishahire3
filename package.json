@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "hash-password": "node scripts/hash-password.mjs",
-    "download-images": "node scripts/download-images.mjs"
+    "hash-password": "node scripts/hash-password.mjs"
   },
   "dependencies": {
     "jose": "^6.2.18",

@@ -97,9 +97,9 @@ export default async function HomePage() {
       <IndustryMarquee />
 
       {/* ───────── TWO PATHS ───────── */}
-      <section className="container-page py-24 sm:py-32">
+      <section className="container-page py-16 sm:py-24">
         <SectionHeading index="01" eyebrow="Two ways we help" title={<>One consultancy, <span className="text-shine">both sides</span> of the table.</>} />
-        <div className="mt-14 grid border-y border-line md:grid-cols-2 md:divide-x md:divide-line">
+        <div className="mt-12 grid border-y border-line md:grid-cols-2 md:divide-x md:divide-line">
           {[
             {
               who: "For employers",
@@ -139,13 +139,13 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── SERVICES ───────── */}
-      <section className="bg-cream py-24 sm:py-32">
+      <section className="bg-cream py-16 sm:py-24">
         <div className="container-page">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <SectionHeading index="02" eyebrow="Services" title={<>Everything you need to <span className="text-shine">hire smarter.</span></>} />
             <Link href="/services" className={cn(btn.outline, "reveal self-start lg:self-auto")}>All services <ArrowRight size={16} /></Link>
           </div>
-          <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-line bg-line lg:grid-cols-3">
+          <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-line bg-line lg:grid-cols-3">
             {SERVICES.map((svc, k) => {
               const Icon = [Users, UserPlus, ClipboardList][k];
               return (
@@ -177,7 +177,7 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── PROCESS ───────── */}
-      <section className="container-page py-24 sm:py-32">
+      <section className="container-page py-16 sm:py-24">
         <SectionHeading index="03" eyebrow="How it works" title={<>A clear path from <span className="text-shine">hello</span> to hired.</>} />
         <div className="mt-12">
           <Process />
@@ -186,7 +186,7 @@ export default async function HomePage() {
 
       {/* ───────── LATEST JOBS ───────── */}
       <section className="border-t border-line">
-        <div className="container-page py-24 sm:py-32">
+        <div className="container-page py-16 sm:py-24">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <SectionHeading index="04" eyebrow="Now hiring" title={<>Latest <span className="text-shine">openings.</span></>} />
             <Link href="/jobs" className={cn(btn.outline, "reveal self-start sm:self-auto")}>View all jobs <ArrowRight size={16} /></Link>
@@ -200,10 +200,10 @@ export default async function HomePage() {
       </section>
 
       {/* ───────── WHY US ───────── */}
-      <section className="bg-cream py-24 sm:py-32">
+      <section className="bg-cream py-16 sm:py-24">
         <div className="container-page">
           <SectionHeading align="center" index="05" eyebrow="Why DishaHire" title={<>Why companies <span className="text-shine">choose us.</span></>} intro="Smarter hiring, better fits, and a partner who actually picks up the phone." />
-          <ol className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          <ol className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {WHY.map((w, k) => (
               <li key={w.title} className="reveal border-t-2 border-brand-950 pt-6">
                 <span className="text-sm font-semibold text-gold-700 tabular-nums">0{k + 1}</span>
@@ -217,7 +217,7 @@ export default async function HomePage() {
 
       {/* ───────── TESTIMONIALS (only when added in admin) ───────── */}
       {testimonials.length > 0 && (
-        <section className="bg-cream py-20 sm:py-28">
+        <section className="bg-cream py-16 sm:py-20">
           <div className="container-page">
             <SectionHeading index="06" eyebrow="Testimonials" title={<>What our clients <span className="text-shine">say</span></>} />
             <ul className={cn("mt-12 grid gap-4", testimonials.length > 1 && "md:grid-cols-2", testimonials.length > 2 && "lg:grid-cols-3")}>

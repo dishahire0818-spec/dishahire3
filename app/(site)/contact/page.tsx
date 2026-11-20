@@ -94,7 +94,7 @@ export default async function ContactPage() {
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-line bg-cream py-20 sm:py-24">
+      <section className="border-t border-line bg-cream py-16 sm:py-20">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_1.5fr]">
           <SectionHeading eyebrow="FAQ" title={<>Common <span className="text-shine">questions</span></>} intro="Can't find your answer? Message us on WhatsApp during office hours." />
           <div className="divide-y divide-line border-y border-line">

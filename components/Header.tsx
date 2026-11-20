@@ -53,7 +53,7 @@ function HeaderView({ pathname, contact }: { pathname: string | null; contact: H
         scrolled ? "shadow-[0_1px_0_0_rgba(255,255,255,.08)]" : "",
       )}
     >
-      <div className="container-page flex h-[4.5rem] items-center justify-between gap-6 sm:h-[5.25rem]">
+      <div className="container-page flex h-16 items-center justify-between gap-6 sm:h-[4.75rem]">
         <Logo />
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {NAV.map((l) => (
@@ -92,7 +92,7 @@ function HeaderView({ pathname, contact }: { pathname: string | null; contact: H
     </header>
       {open && (
       <div id="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu" className="fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-brand-950 text-white md:hidden">
-        <div className="container-page flex h-[4.5rem] shrink-0 items-center justify-between border-b border-white/10">
+        <div className="container-page flex h-16 shrink-0 items-center justify-between border-b border-white/10">
           <Logo />
           <button type="button" onClick={close} className="-mr-2 rounded-full p-2 text-white" aria-label="Close menu">
             <X size={24} />

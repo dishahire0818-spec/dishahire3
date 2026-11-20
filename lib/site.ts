@@ -123,22 +123,6 @@ export const FAQ = [
   },
 ];
 
-/**
- * Photos are from Unsplash (https://unsplash.com/license): free for commercial use, no attribution required.
- * Run `npm run download-images` and set USE_LOCAL_IMAGES = true to self-host them from /public/images.
- */
-const USE_LOCAL_IMAGES = false;
-const photo = (name: string, id: string) =>
-  USE_LOCAL_IMAGES ? `/images/${name}.jpg` : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=80&w=1600`;
-
-export const PHOTOS = {
-  consultant: photo("consultant", "1573496359142-b8d87734a5a2"),
-  office: photo("office", "1573161158971-d1b07323869a"),
-  meeting: photo("meeting", "1516321318423-f06f85e504b3"),
-  building: photo("building", "1486406146926-c627a92ad1ab"),
-  team: photo("team", "1504384308090-c894fdcc538d"),
-  interview: photo("interview", "1600880292203-757bb62b4baf"),
-};
 
 /** Step-by-step process for each audience (home page timeline and services page). */
 export const FLOWS = {
