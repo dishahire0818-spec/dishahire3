@@ -1,4 +1,5 @@
 import "server-only";
+import { env } from "./env";
 import { CONTACT, SITE } from "./site";
 
 const esc = (s: unknown) =>
@@ -6,7 +7,7 @@ const esc = (s: unknown) =>
 
 /** Sends an alert via Resend. Silently skipped when RESEND_API_KEY isn't configured. */
 export async function sendAlert(subject: string, fields: Record<string, unknown>, replyTo?: string) {
-  const key = process.env.RESEND_API_KEY;
+  const key = env("RESEND_API_KEY");
   if (!key) return;
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== undefined && v !== "")
@@ -25,8 +26,8 @@ export async function sendAlert(subject: string, fields: Record<string, unknown>
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: process.env.ALERT_EMAIL_FROM || "DishaHire Website <onboarding@resend.dev>",
-        to: (process.env.ALERT_EMAIL_TO || CONTACT.email).split(",").map((s) => s.trim()),
+        from: env("ALERT_EMAIL_FROM") || "DishaHire Website <onboarding@resend.dev>",
+        to: (env("ALERT_EMAIL_TO") || CONTACT.email).split(",").map((s) => s.trim()),
         subject: `[DishaHire] ${subject}`,
         html,
         ...(replyTo ? { reply_to: replyTo } : {}),

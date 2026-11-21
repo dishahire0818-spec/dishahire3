@@ -3,7 +3,7 @@ export const SITE = {
   tagline: "Right Talent, Right Direction.",
   description:
     "DishaHire is a Rajkot-based recruitment consultancy connecting ambitious professionals with forward-thinking employers across 15 industries: permanent staffing, bulk hiring, talent sourcing and HR consultancy.",
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://dishahire.vercel.app").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://dishahire3.vercel.app").replace(/\/$/, ""),
   locale: "en_IN",
 };
 

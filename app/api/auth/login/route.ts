@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 import { clientIp, fail, json, rateLimit, sameOrigin } from "@/lib/http";
 import { verifyPassword } from "@/lib/password";
 import { createSession, sessionCookie } from "@/lib/session";
@@ -13,10 +14,10 @@ export async function POST(req: NextRequest) {
 
   // Clear setup errors instead of a generic failure
   const missing = [
-    !process.env.ADMIN_EMAIL && "ADMIN_EMAIL",
-    !/^scrypt:[\w-]+:[\w-]+$/.test(process.env.ADMIN_PASSWORD_HASH ?? "") && "ADMIN_PASSWORD_HASH",
-    (process.env.JWT_SECRET ?? "").length < 32 && "JWT_SECRET",
-    !(process.env.MONGODB_URI || process.env.MONGO_URI) && "MONGODB_URI",
+    !env("ADMIN_EMAIL") && "ADMIN_EMAIL",
+    !/^scrypt:[\w-]+:[\w-]+$/.test(env("ADMIN_PASSWORD_HASH")) && "ADMIN_PASSWORD_HASH",
+    env("JWT_SECRET").length < 32 && "JWT_SECRET",
+    !(env("MONGODB_URI") || env("MONGO_URI")) && "MONGODB_URI",
   ].filter(Boolean);
   if (missing.length) {
     return fail(`Admin login is not set up yet. Add ${missing.join(", ")} in Vercel → Settings → Environment Variables, then redeploy.`, 503);
@@ -38,8 +39,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const adminEmail = (process.env.ADMIN_EMAIL || "").trim().toLowerCase();
-  const passwordOk = await verifyPassword(password, process.env.ADMIN_PASSWORD_HASH);
+  const adminEmail = env("ADMIN_EMAIL").toLowerCase();
+  const passwordOk = await verifyPassword(password, env("ADMIN_PASSWORD_HASH"));
   if (!adminEmail || email !== adminEmail || !passwordOk) return fail("Incorrect email or password.", 401);
 
   const res = json({ ok: true });

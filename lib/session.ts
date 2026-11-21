@@ -1,11 +1,12 @@
 // Edge-safe session helpers (no database imports): used by proxy.ts and route handlers.
 import { SignJWT, jwtVerify } from "jose";
+import { env } from "./env";
 
 export const SESSION_COOKIE = "dh_admin";
 export const SESSION_MAX_AGE = 60 * 60 * 8; // 8 hours
 
 function secret() {
-  const s = process.env.JWT_SECRET;
+  const s = env("JWT_SECRET");
   if (!s || s.length < 32) throw new Error("JWT_SECRET must be set (at least 32 characters)");
   return new TextEncoder().encode(s);
 }
